@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Contact')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container section narrow">
+  <h1>Contact us</h1>
+  <p class="alert success" th:if="${success}" th:text="${success}"></p>
+  <form th:action="@{/contact}" th:object="${contactForm}" method="post" class="form">
+    <label>Name <input type="text" th:field="*{name}"></label>
+    <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    <label>Email <input type="email" th:field="*{email}"></label>
+    <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    <label>Phone <input type="tel" th:field="*{phone}"></label>
+    <label>Message <textarea rows="5" th:field="*{message}"></textarea></label>
+    <span class="error" th:if="${#fields.hasErrors('message')}" th:errors="*{message}"></span>
+    <button class="btn" type="submit">Send</button>
+  </form>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

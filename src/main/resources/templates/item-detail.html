@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${item.title})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="container section detail">
+  <img th:if="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}" th:src="${item.imageUrl}" th:alt="${item.title}">
+  <div>
+    <h1 th:text="${item.title}">Title</h1>
+    <p th:if="${item.category != null}" th:text="${item.category.name}">Category</p>
+    <p class="price" th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 2, 'POINT')}">0.00</p>
+    <p th:text="${item.description}">Description</p>
+    <a class="btn" th:href="@{/contact}">Enquire</a>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

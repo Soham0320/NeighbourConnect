@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-50" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HavenGate - Smart Gated Community Dashboard</title>
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Custom Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef6ff',
+              100: '#d9ecff',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              700: '#1e40af',
+            }
+          },
+          boxShadow: {
+            'soft-sm': '0 2px 8px 0 rgba(148, 163, 184, 0.08)',
+            'soft-md': '0 8px 24px -4px rgba(148, 163, 184, 0.12), 0 2px 6px -2px rgba(148, 163, 184, 0.08)',
+            'soft-card': '0 12px 32px -6px rgba(99, 102, 241, 0.08), 0 4px 12px -2px rgba(148, 163, 184, 0.06)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Scrollbar & Micro-Styles -->
+<style data-purpose="custom-enhancements">
+    /* Subtle custom scrollbar for horizontal containers */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="h-full text-slate-800 antialiased font-sans flex flex-col">
+<!-- BEGIN: TopStatusRibbon -->
+<!-- Contextual IoT Beacon and Society Switcher Bar -->
+<div class="sticky top-0 z-50 bg-emerald-50/95 backdrop-blur-md border-b border-emerald-200/80 px-4 sm:px-6 py-2 text-xs font-medium text-emerald-900 transition-all" data-purpose="status-ribbon">
+<div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-2">
+<!-- Left: Beacon Connection Indicator -->
+<div class="flex items-center gap-2.5">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+</span>
+<div class="flex items-center gap-1.5 font-semibold">
+<span>📍 Block A Lobby Beacon Connected</span>
+<span class="text-emerald-400">|</span>
+<span class="text-emerald-700 font-normal">Latency: 4ms • Mesh Active (Node #12)</span>
+</div>
+</div>
+<!-- Right: Society Switcher & Gate Status -->
+<div class="flex items-center gap-4 text-xs">
+<div class="hidden md:flex items-center gap-1.5 text-emerald-700">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Perimeter Fencing: Intact</span>
+</div>
+<div class="inline-flex items-center gap-1 bg-white/80 border border-emerald-200 px-2.5 py-1 rounded-full shadow-2xs cursor-pointer hover:bg-white transition-colors">
+<span class="text-slate-600">Active Wing:</span>
+<span class="font-bold text-emerald-950">Palm Heights Residences - Wing A</span>
+<svg class="w-3.5 h-3.5 text-slate-400 ml-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<!-- END: TopStatusRibbon -->
+<!-- Main App Shell -->
+<div class="flex-1 flex overflow-hidden">
+<!-- BEGIN: LeftNavigationSidebar -->
+<!-- Navigation rail inspired by the reference clean rounded sidebar -->
+<aside class="hidden lg:flex w-64 xl:w-72 flex-col bg-white border-r border-slate-100 p-5 justify-between select-none" data-purpose="main-sidebar">
+<div class="space-y-6">
+<!-- Logo Branding -->
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h1 class="text-lg font-extrabold text-slate-900 tracking-tight leading-none">HavenGate</h1>
+<p class="text-xs font-semibold text-slate-400 mt-0.5">Palm Heights OS</p>
+</div>
+</div>
+<!-- Navigation Menu Links -->
+<nav class="space-y-1.5 pt-2">
+<!-- Active Nav Item -->
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-blue-50/80 text-blue-600 font-bold transition-all shadow-xs" href="#">
+<svg class="w-5 h-5 text-blue-600" fill="currentColor" viewbox="0 0 24 24">
+<path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+</svg>
+<span class="text-sm">Dashboard</span>
+</a>
+<!-- Feeds & Alerts -->
+<a class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold transition-all group" href="#">
+<div class="flex items-center gap-3.5">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-sm">Feeds &amp; Alerts</span>
+</div>
+<span class="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-100 text-rose-600">3</span>
+</a>
+<!-- HomeKitchen (Highlighted feature) -->
+<a class="flex items-center justify-between px-4 py-3 rounded-2xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold transition-all group" href="#">
+<div class="flex items-center gap-3.5">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-amber-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-sm">HomeKitchen</span>
+</div>
+<span class="px-2 py-0.5 text-xs font-bold rounded-full bg-amber-100 text-amber-700">Fresh</span>
+</a>
+<!-- Facilities Booking -->
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold transition-all group" href="#">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-sm">Facilities Booking</span>
+</a>
+<!-- Resident Directory -->
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold transition-all group" href="#">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-sm">Resident Directory</span>
+</a>
+<!-- Society Dues -->
+<a class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-semibold transition-all group" href="#">
+<svg class="w-5 h-5 text-slate-400 group-hover:text-slate-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-sm">Society Dues</span>
+</a>
+</nav>
+<!-- Society Membership / Haven Premium Promo (Inspired by reference bottom card) -->
+<div class="p-4 rounded-3xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100/80 space-y-3">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-xl bg-amber-400 text-amber-950 flex items-center justify-center font-bold text-xs shadow-xs">
+              👑
+            </div>
+<div>
+<p class="text-xs font-bold text-slate-900">Palm Elite Club</p>
+<p class="text-[11px] text-slate-500">Clubhouse &amp; Valet Pass</p>
+</div>
+</div>
+<p class="text-xs text-slate-600 leading-relaxed">Fast-track clubhouse booking and pool cabana privileges enabled.</p>
+<button class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-sm transition" type="button">
+            View Privileges
+          </button>
+</div>
+</div>
+<!-- Resident Profile Footer -->
+<div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img alt="Alex Morgan Avatar" class="w-10 h-10 rounded-2xl object-cover ring-2 ring-blue-500/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4EJ9TlLDs4R-DdbEJxygXzQQa7DxxgS7cJ_tIjL68mLcP63WMNsNB_iYZS__FkmYR-NLHHaOX0xmJaQAK2J7jFY4142MYara3UdUrO0qJCtQ8da9gjKddeH8pbbQCODn1cuWWfFX-YKZMmU8WeFx2Lqje_AADg3jJtw0oeMlNb8ulQRrqNHFoYPuoO9z8AnL9iGfMytQAoyf87OWQXbIBmEnP5D4XVNEKuRFgUmu6tFjC6vKjS_aw"/>
+<span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white"></span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 leading-tight">Alex Morgan</p>
+<p class="text-xs font-medium text-slate-500">Unit 402-B • Council</p>
+</div>
+</div>
+<button aria-label="Settings" class="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</aside>
+<!-- END: LeftNavigationSidebar -->
+<!-- Central Body Wrapper (Center Main Feed + Right Panel) -->
+<div class="flex-1 flex flex-col overflow-y-auto">
+<!-- BEGIN: DashboardTopHeader -->
+<header class="bg-white/80 backdrop-blur-sm border-b border-slate-100 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-0 z-30" data-purpose="top-header">
+<!-- Search Field (styled like reference top pill bar) -->
+<div class="relative flex-1 max-w-xl">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+<svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100/80 border-transparent rounded-2xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium" placeholder="Search notices, meals, amenities, residents..." type="text"/>
+</div>
+<!-- Security Status Pills & Notification Icons -->
+<div class="flex items-center gap-3 self-end md:self-auto">
+<!-- Gate Security Badge -->
+<div class="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200/70 px-3 py-1.5 rounded-2xl text-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-slate-500 font-medium">Guards on Duty:</span>
+<span class="text-slate-900 font-bold">4/4</span>
+<span class="text-slate-300">|</span>
+<span class="text-emerald-700 font-semibold">Gates: Secured</span>
+</div>
+<!-- Notification Bell -->
+<button aria-label="Notifications" class="relative p-2 text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200/70 rounded-2xl transition" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+</button>
+<!-- Emergency SOS Trigger Button -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-xs rounded-2xl transition shadow-2xs" type="button">
+<span class="text-sm">🚨</span>
+<span>SOS Desk</span>
+</button>
+</div>
+</header>
+<!-- END: DashboardTopHeader -->
+<!-- Content Area with Center Feed and Right Widgets -->
+<div class="flex-1 p-5 md:p-7 grid grid-cols-1 xl:grid-cols-12 gap-7">
+<!-- Center Main Content (8 cols on XL screens) -->
+<main class="xl:col-span-8 space-y-7">
+<!-- BEGIN: WelcomeHeroCard -->
+<!-- Inspired by the soft blue, large-radius banner in reference UI -->
+<section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-100 via-sky-50 to-indigo-100 p-6 md:p-8 border border-blue-200/60 shadow-soft-card" data-purpose="hero-banner">
+<div class="relative z-10 max-w-xl space-y-3">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 backdrop-blur-xs border border-blue-200 text-blue-800 text-xs font-bold shadow-2xs">
+<span>🏢 Palm Heights • Wing A</span>
+<span>•</span>
+<span class="text-emerald-600 font-semibold">Unit 402-B</span>
+</div>
+<h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Good morning, Alex! ☀️
+              </h2>
+<p class="text-sm md:text-base text-slate-600 font-medium">
+                Here is your society overview today: elevator maintenance scheduled, 2 packages at gate concierge, and annual AGM voting is now live.
+              </p>
+<!-- Hero Quick Indicators -->
+<div class="pt-2 flex flex-wrap gap-2.5">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-xl text-xs font-semibold text-slate-700 shadow-2xs border border-slate-100">
+<span class="text-emerald-500">✓</span>
+<span>Maintenance Cleared</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-xl text-xs font-semibold text-slate-700 shadow-2xs border border-slate-100">
+<span class="text-blue-500">📦</span>
+<span>2 Active Packages</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-xl text-xs font-semibold text-slate-700 shadow-2xs border border-slate-100">
+<span class="text-purple-500">📅</span>
+<span>Meeting: 7:00 PM</span>
+</div>
+</div>
+<!-- Hero CTA -->
+<div class="pt-3">
+<a class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/20 transition-all hover:gap-3" href="#quick-notices">
+<span>Review Priority Feeds</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</div>
+<!-- Soft decorative illustration / icon graphic badge -->
+<div class="hidden md:block absolute right-6 -bottom-4 opacity-90 select-none pointer-events-none">
+<div class="w-48 h-48 rounded-full bg-gradient-to-tr from-blue-300/40 to-sky-200/50 blur-2xl absolute"></div>
+<img alt="Society Illustration" class="relative z-10 w-40 h-40 object-contain drop-shadow-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD6hfxLv6ptl64Rxykz4SBMIYkkthjbIUeUooOUbX9c7ruo1BzcDcAOVBi8UvEtVrnRrDLH55QomLwtmu7mTXtHkF730K5hgbgr1vrvPKhYl6ysXRc_pcQDuFKA3duYzRHhIXAs07qP4uo1Rals5QwWlVVC4bY6UYwhB7thTbWJOrfFXGkvB1Z0gpYybSDgwnr4QWfwKxQlv0vcafsa3H7EVASWwcq1WEgs31WB3yEqJWrYRkh5Zvv"/>
+</div>
+</section>
+<!-- END: WelcomeHeroCard -->
+<!-- BEGIN: MessageSegregationColumns -->
+<!-- 3-Column Smart Message Feeds -->
+<section class="space-y-4" data-purpose="segregated-feeds" id="quick-notices">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Priority Resident Feeds</h3>
+<p class="text-xs text-slate-500">Intelligent categorical grouping of complex communications</p>
+</div>
+<button class="text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1" type="button">
+<span>Filter Feeds</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- a) High Alerts (Rose/Red Theme) -->
+<div class="rounded-3xl p-4 bg-gradient-to-b from-rose-50/90 via-rose-50/40 to-white border border-rose-200/80 shadow-soft-sm flex flex-col justify-between" data-purpose="feed-high-alerts">
+<div>
+<!-- Header -->
+<div class="flex items-center justify-between pb-3 border-b border-rose-100">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+<h4 class="text-xs font-extrabold uppercase tracking-wider text-rose-900">High Alerts</h4>
+</div>
+<span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-100 text-rose-700">Urgent (2)</span>
+</div>
+<!-- Alert Items -->
+<div class="mt-3.5 space-y-3">
+<div class="p-3 bg-white/95 rounded-2xl border border-rose-100 shadow-2xs space-y-2">
+<div class="flex items-start justify-between gap-1">
+<span class="text-xs font-bold text-slate-900 leading-tight">Elevator #2 Shutdown</span>
+<span class="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded">Today</span>
+</div>
+<p class="text-[11px] text-slate-600">Maintenance shutdown today from 2:00 PM - 4:00 PM for cable recertification.</p>
+<button class="w-full py-1 text-[11px] font-bold bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg transition" type="button">
+                        Acknowledge Notice
+                      </button>
+</div>
+<div class="p-3 bg-white/95 rounded-2xl border border-rose-100 shadow-2xs space-y-2">
+<div class="flex items-start justify-between gap-1">
+<span class="text-xs font-bold text-slate-900 leading-tight">Water Tank Flush</span>
+<span class="text-[10px] text-slate-400 font-medium">Tomorrow</span>
+</div>
+<p class="text-[11px] text-slate-600">Overhead supply will pause 9 AM - 12 PM for quarterly chemical disinfection.</p>
+<div class="flex justify-between items-center text-[10px] text-slate-400 pt-1">
+<span>Facility Desk</span>
+<a class="text-rose-600 font-bold hover:underline" href="tel:5550192">Call Desk</a>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-3 mt-2 border-t border-rose-100/60">
+<button class="text-xs font-bold text-rose-600 hover:text-rose-800 flex items-center justify-center w-full gap-1" type="button">
+<span>Emergency Contacts</span>
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<!-- b) Information & Notices (Amber/Orange Theme) -->
+<div class="rounded-3xl p-4 bg-gradient-to-b from-amber-50/90 via-amber-50/40 to-white border border-amber-200/80 shadow-soft-sm flex flex-col justify-between" data-purpose="feed-notices">
+<div>
+<!-- Header -->
+<div class="flex items-center justify-between pb-3 border-b border-amber-100">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+<h4 class="text-xs font-extrabold uppercase tracking-wider text-amber-900">Notices</h4>
+</div>
+<span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-100 text-amber-800">Council</span>
+</div>
+<!-- Notice Items -->
+<div class="mt-3.5 space-y-3">
+<div class="p-3 bg-white/95 rounded-2xl border border-amber-100 shadow-2xs space-y-2">
+<div class="flex items-start justify-between gap-1">
+<span class="text-xs font-bold text-slate-900 leading-tight">AGM Renovation Voting</span>
+<span class="text-[10px] text-amber-700 font-bold bg-amber-50 px-1.5 py-0.5 rounded">Voting Open</span>
+</div>
+<p class="text-[11px] text-slate-600">Electronic ballot opens this Friday for the Club Gym upgrade and squash court.</p>
+<button class="w-full py-1 text-[11px] font-bold bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition shadow-2xs" type="button">
+                        Cast Your Vote
+                      </button>
+</div>
+<div class="p-3 bg-white/95 rounded-2xl border border-amber-100 shadow-2xs space-y-1.5">
+<span class="text-xs font-bold text-slate-900 leading-tight block">Visitor Bay 4 Resurfacing</span>
+<p class="text-[11px] text-slate-600">Curing will finish Thursday. Please instruct guest vehicles to park in Bay 6.</p>
+<div class="text-[10px] text-slate-400 pt-1">
+<span>Estate Manager • Posted 3h ago</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-3 mt-2 border-t border-amber-100/60">
+<a class="text-xs font-bold text-amber-700 hover:text-amber-900 flex items-center justify-center w-full gap-1" href="#">
+<span>View Notice Archives</span>
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</div>
+<!-- c) General Chat & Community Board (Indigo/Slate Theme) -->
+<div class="rounded-3xl p-4 bg-gradient-to-b from-indigo-50/80 via-indigo-50/30 to-white border border-indigo-200/70 shadow-soft-sm flex flex-col justify-between" data-purpose="feed-community-board">
+<div>
+<!-- Header -->
+<div class="flex items-center justify-between pb-3 border-b border-indigo-100">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+<h4 class="text-xs font-extrabold uppercase tracking-wider text-indigo-900">Neighbor Buzz</h4>
+</div>
+<span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700">8 New</span>
+</div>
+<!-- Chat Items -->
+<div class="mt-3.5 space-y-3">
+<div class="p-3 bg-white/95 rounded-2xl border border-indigo-100 shadow-2xs space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-bold text-indigo-600">Lost &amp; Found</span>
+<span class="text-[10px] text-slate-400">12m ago</span>
+</div>
+<p class="text-xs font-bold text-slate-900 leading-snug">Blue carabiner keys near pool</p>
+<p class="text-[11px] text-slate-600">Handed over to Security Guard Ramesh at Gate 1.</p>
+<button class="text-[11px] text-blue-600 font-bold hover:underline" type="button">
+                        Claim Item →
+                      </button>
+</div>
+<div class="p-3 bg-white/95 rounded-2xl border border-indigo-100 shadow-2xs space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-bold text-emerald-600">Carpool Request</span>
+<span class="text-[10px] text-slate-400">45m ago</span>
+</div>
+<p class="text-xs font-bold text-slate-900 leading-snug">Rohan (Flat 201) to Tech Park</p>
+<p class="text-[11px] text-slate-600">Leaving 8:45 AM Mon-Fri. 2 seats open in EV sedan.</p>
+<button class="w-full py-1 text-[11px] font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg transition" type="button">
+                        Connect with Rohan
+                      </button>
+</div>
+</div>
+</div>
+<div class="pt-3 mt-2 border-t border-indigo-100/60">
+<a class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center justify-center w-full gap-1" href="#">
+<span>Open Community Chat</span>
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- END: MessageSegregationColumns -->
+<!-- BEGIN: HomeKitchenMealExchange -->
+<!-- HomeKitchen Section Header & Horizontal Grid -->
+<section class="space-y-4 pt-2" data-purpose="homekitchen-section">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<div class="flex items-center gap-2">
+<span class="text-lg">🍲</span>
+<h3 class="text-lg font-extrabold text-slate-900 tracking-tight">HomeKitchen™ Meal Exchange</h3>
+<span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wide">Resident Chefs</span>
+</div>
+<p class="text-xs text-slate-500">Freshly prepared homemade meals crafted by passionate neighbors in Palm Heights</p>
+</div>
+<!-- Filter Pills (inspired by reference skill/language pills) -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+<button class="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold whitespace-nowrap shadow-xs" type="button">
+                  All Cuisines
+                </button>
+<button class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold whitespace-nowrap transition" type="button">
+                  Home Bakes
+                </button>
+<button class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold whitespace-nowrap transition" type="button">
+                  Regional Thalis
+                </button>
+<button class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold whitespace-nowrap transition" type="button">
+                  Healthy Bowls
+                </button>
+<button class="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold whitespace-nowrap transition" type="button">
+                  + Post a Dish
+                </button>
+</div>
+</div>
+<!-- HomeKitchen Cards Grid (2x2 on desktop) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Dish Card 1: Pure Veg Gujarati Thali -->
+<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all flex flex-col justify-between group" data-purpose="meal-card">
+<div class="space-y-3">
+<!-- Image & Chef Tag -->
+<div class="relative h-44 w-full rounded-2xl overflow-hidden bg-slate-100">
+<img alt="Authentic Gujarati Thali" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbUmK8x2bUJVVoYq9Az8MMTNkgSxHy-18nFBrYDHeA4oWBUTyu87G6H0ysHmyAH3-_Hga2PxofsH6yUIXfRlsLxdAAJEwtSuO1swO54g2O3dOePD9iUAfqJ-Oh1p-rmSEzqdEM8c5w4DeHnE15h3m-nwXcgDYhOSF2-MIRF_sD23dkBVshQFrmcHtgl7bjjuiNCXp4Hsu7t6ik-q8KW4A0TPgm_AFsaWZ_xYKbFS8SUOhHOyufVYXO"/>
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl shadow-2xs">
+<!-- Pure Veg Indicator (Green Square with Green Circle) -->
+<span class="w-3.5 h-3.5 border border-emerald-600 flex items-center justify-center p-0.5 rounded-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>
+</span>
+<span class="text-[11px] font-bold text-slate-800">Pure Veg</span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
+                      Cooked by Priya (Flat 304)
+                    </div>
+<div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+<span>★ 4.9</span>
+<span class="text-slate-400 font-normal">(28)</span>
+</div>
+</div>
+<!-- Details -->
+<div>
+<div class="flex items-start justify-between gap-2">
+<h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        Authentic Gujarati Thali + Rotlis
+                      </h4>
+<span class="text-base font-black text-slate-900">$8.50</span>
+</div>
+<p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                      Includes 4 Phulka Rotis, Gujarati Dal, Ringan Bateta Nu Shaak, Basmati Rice, and fresh homemade Shrikhand.
+                    </p>
+</div>
+</div>
+<!-- Footer / CTA -->
+<div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-slate-500">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-semibold text-slate-700">Ready at 1:00 PM</span>
+<span class="text-slate-300">•</span>
+<span class="text-rose-600 font-bold">3 left</span>
+</div>
+<button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs transition hover:scale-[1.02] active:scale-95" type="button">
+                    Reserve Meal
+                  </button>
+</div>
+</div>
+<!-- Dish Card 2: Smoked BBQ Paneer Bowl -->
+<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all flex flex-col justify-between group" data-purpose="meal-card">
+<div class="space-y-3">
+<!-- Image & Chef Tag -->
+<div class="relative h-44 w-full rounded-2xl overflow-hidden bg-slate-100">
+<img alt="Smoked BBQ Paneer Bowl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsRrRmDo7wYvteQkRYxnkYjVwXUBSfDo9gSTFKthBihsuG7salbKHl-J_RUBMqu_8_AqoGxzcoZwa7RLrx7D7a3HzGh4mSY8_SQx1VgDKpZ9Z0rMm1XcZHXvb7msoq654K5jECIPkBEE3vOHwfdsn-Xdj9SGyOKDPglZACJ_SgHcMUjzBkc4lHnNnafnn7AuOsuyQE80EQb25-2JnmxAmePUxQ-PbyW3uCwrkwiO-tj_kS6zWEGLpX"/>
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl shadow-2xs">
+<span class="w-3.5 h-3.5 border border-emerald-600 flex items-center justify-center p-0.5 rounded-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>
+</span>
+<span class="text-[11px] font-bold text-slate-800">High Protein</span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
+                      Chef David (Flat 108)
+                    </div>
+<div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+<span>★ 5.0</span>
+<span class="text-slate-400 font-normal">(42)</span>
+</div>
+</div>
+<!-- Details -->
+<div>
+<div class="flex items-start justify-between gap-2">
+<h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        Smoked BBQ Paneer &amp; Quinoa Bowl
+                      </h4>
+<span class="text-base font-black text-slate-900">$9.00</span>
+</div>
+<p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                      Charcoal-grilled cottage cheese cubes, roasted edamame, tri-color quinoa, charred corn, and chipotle lime dressing.
+                    </p>
+</div>
+</div>
+<!-- Footer / CTA -->
+<div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-slate-500">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-semibold text-slate-700">Ready at 12:30 PM</span>
+<span class="text-slate-300">•</span>
+<span class="text-emerald-600 font-bold">5 left</span>
+</div>
+<button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs transition hover:scale-[1.02] active:scale-95" type="button">
+                    Reserve Meal
+                  </button>
+</div>
+</div>
+<!-- Dish Card 3: Non-Veg Biryani -->
+<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all flex flex-col justify-between group" data-purpose="meal-card">
+<div class="space-y-3">
+<!-- Image & Chef Tag -->
+<div class="relative h-44 w-full rounded-2xl overflow-hidden bg-slate-100">
+<img alt="Hyderabadi Dum Biryani" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt_umtm1YOpMP2lAWpV0W6dydINRRHHMMrWvU3uwhf8kGFMFLbei0RdMHG8uETiKiAa6vGVoTIkMh2yZ88sFIRBdXbI9VyHDJetlt1mi-brfrPEUF2sy5ek58oEDDaAdUeeRr9RJN4bCW0bfvccGKtlpB9HuYCvisQ4klASplYc_wIEoRxVoQqRR_8Nbv1U06NDeGPT-_yRZsexLjBqQ3-LA2tn2G2oxYdLg8uoZvsW3NyQluxAklY"/>
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl shadow-2xs">
+<!-- Non-Veg Indicator (Red Square with Red Circle) -->
+<span class="w-3.5 h-3.5 border border-rose-600 flex items-center justify-center p-0.5 rounded-xs">
+<span class="w-2 h-2 rounded-full bg-rose-600 inline-block"></span>
+</span>
+<span class="text-[11px] font-bold text-slate-800">Non-Veg Special</span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
+                      Zainab &amp; Co. (Flat 701)
+                    </div>
+<div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+<span>★ 4.9</span>
+<span class="text-slate-400 font-normal">(64)</span>
+</div>
+</div>
+<!-- Details -->
+<div>
+<div class="flex items-start justify-between gap-2">
+<h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        Hyderabadi Chicken Dum Biryani
+                      </h4>
+<span class="text-base font-black text-slate-900">$11.50</span>
+</div>
+<p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                      Slow-cooked dum biryani with long grain saffron rice, tender spiced chicken, served with Mirchi Ka Salan &amp; raita.
+                    </p>
+</div>
+</div>
+<!-- Footer / CTA -->
+<div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-slate-500">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-semibold text-slate-700">Ready at 7:30 PM</span>
+<span class="text-slate-300">•</span>
+<span class="text-rose-600 font-bold">2 left</span>
+</div>
+<button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs transition hover:scale-[1.02] active:scale-95" type="button">
+                    Reserve Meal
+                  </button>
+</div>
+</div>
+<!-- Dish Card 4: Artisan Sourdough Bakes -->
+<div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-soft-sm hover:shadow-soft-md transition-all flex flex-col justify-between group" data-purpose="meal-card">
+<div class="space-y-3">
+<!-- Image & Chef Tag -->
+<div class="relative h-44 w-full rounded-2xl overflow-hidden bg-slate-100">
+<img alt="Sourdough Loaf" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGSVxigHEL2vAOUIqW57_zYqOogaas66b3bAi9p_wUZzLk5zabQhCVu7LVkkungCadaqh34cJmPJMbilB2kUW4XlqAMzGCBrji7v08KrqtHoYiCnhrppmLt_lbbcCNPanTyixx9d4U8PnwekBTkj-EUKwKKQCcpacwkl6jfaVUErRT8xm760oubAbjnh0G5NGr2gZ5ISXRmkg1qoWxi7czpTFFZ8VkPrc1wzQT7uyoPV6DLOdjMzLu"/>
+<div class="absolute top-2.5 left-2.5 flex items-center gap-1.5 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-xl shadow-2xs">
+<span class="w-3.5 h-3.5 border border-emerald-600 flex items-center justify-center p-0.5 rounded-xs">
+<span class="w-2 h-2 rounded-full bg-emerald-600 inline-block"></span>
+</span>
+<span class="text-[11px] font-bold text-slate-800">Fresh Bakes</span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
+                      Sunita Aunty (Flat 502)
+                    </div>
+<div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+<span>★ 4.8</span>
+<span class="text-slate-400 font-normal">(19)</span>
+</div>
+</div>
+<!-- Details -->
+<div>
+<div class="flex items-start justify-between gap-2">
+<h4 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        Artisan Sourdough Loaf &amp; Herb Butter
+                      </h4>
+<span class="text-base font-black text-slate-900">$6.50</span>
+</div>
+<p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                      36-hour cold fermented sourdough loaf with rosemary garlic compounded cultured butter. Warm and crisp crust.
+                    </p>
+</div>
+</div>
+<!-- Footer / CTA -->
+<div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs text-slate-500">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-semibold text-slate-700">Ready at 4:30 PM</span>
+<span class="text-slate-300">•</span>
+<span class="text-amber-600 font-bold">4 loaves</span>
+</div>
+<button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs transition hover:scale-[1.02] active:scale-95" type="button">
+                    Reserve Meal
+                  </button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HomeKitchenMealExchange -->
+</main>
+<!-- BEGIN: RightSideWidgets -->
+<!-- Right Widget Rail (Daily Status, Gatekeeper, Bookings - structured like reference leaderboard/goals panel) -->
+<aside class="xl:col-span-4 space-y-6">
+<!-- Widget 1: Society Gatekeeper & Parcel Tracking (Styled like Daily Goal in reference) -->
+<div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-soft-sm space-y-5" data-purpose="parcel-widget">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider">Gatekeeper Concierge</h4>
+<p class="text-xs text-slate-400">Security Gate #1 Station</p>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
+                2 Ready
+              </span>
+</div>
+<!-- Visual Circular Parcel Progress Indicator (matches reference radial dial) -->
+<div class="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100">
+<div class="relative w-16 h-16 flex items-center justify-center shrink-0">
+<svg class="w-16 h-16 transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-slate-200" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-blue-600" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="66, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-xs font-extrabold text-slate-900">2 / 3</span>
+<span class="text-[9px] text-slate-400 uppercase font-medium">Logged</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="text-xs font-bold text-slate-800">Parcels Awaiting Pickup</p>
+<p class="text-[11px] text-slate-500 leading-tight">Received from Amazon Logistics and BlueDart courier.</p>
+<div class="pt-1 flex items-center gap-1.5 text-[11px] font-bold text-blue-600 cursor-pointer hover:underline">
+<span>Show QR Pickup Code</span>
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+<!-- Parcel list items -->
+<div class="space-y-2.5">
+<div class="flex items-center justify-between p-3 rounded-2xl bg-white border border-slate-100 shadow-2xs">
+<div class="flex items-center gap-3">
+<span class="text-lg">📦</span>
+<div>
+<p class="text-xs font-bold text-slate-900">Amazon #AZ-8921</p>
+<p class="text-[11px] text-slate-400">Arrived 10:45 AM • Locker #14</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700">Verified</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-2xl bg-white border border-slate-100 shadow-2xs">
+<div class="flex items-center gap-3">
+<span class="text-lg">✉️</span>
+<div>
+<p class="text-xs font-bold text-slate-900">Registered SpeedPost</p>
+<p class="text-[11px] text-slate-400">Signed by Guard Ramesh</p>
+</div>
+</div>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700">Signature Req</span>
+</div>
+</div>
+<button class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-2xl transition shadow-xs" type="button">
+              Authorize Gate Pass for Delivery Agent
+            </button>
+</div>
+<!-- Widget 2: Facility Booking Quick Calendar -->
+<div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-soft-sm space-y-4" data-purpose="facility-calendar-widget">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider">Facility Reservations</h4>
+<p class="text-xs text-slate-400">Clubhouse &amp; Courts</p>
+</div>
+<button class="text-xs font-bold text-blue-600 hover:underline" type="button">Book New +</button>
+</div>
+<!-- Active Reservation Card -->
+<div class="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-blue-900">🎾 Tennis Court #1</span>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">Confirmed</span>
+</div>
+<div class="flex items-center gap-3 text-xs text-slate-600 font-medium">
+<span>Today</span>
+<span>•</span>
+<span>6:00 PM - 7:00 PM</span>
+<span>•</span>
+<span>Floodlit</span>
+</div>
+<div class="pt-1 flex items-center justify-between text-[11px]">
+<span class="text-slate-500">Partner: David (Flat 108)</span>
+<button class="text-rose-600 font-bold hover:underline" type="button">Reschedule</button>
+</div>
+</div>
+<!-- Quick Availability Bar -->
+<div class="space-y-2 pt-1">
+<span class="text-xs font-bold text-slate-700 block">Today's Amenity Availability</span>
+<div class="grid grid-cols-3 gap-2 text-center">
+<div class="p-2 rounded-xl bg-slate-50 border border-slate-100">
+<span class="text-[10px] text-slate-400 block">Gym</span>
+<span class="text-xs font-bold text-emerald-600">Moderate</span>
+</div>
+<div class="p-2 rounded-xl bg-slate-50 border border-slate-100">
+<span class="text-[10px] text-slate-400 block">Pool</span>
+<span class="text-xs font-bold text-emerald-600">Open</span>
+</div>
+<div class="p-2 rounded-xl bg-slate-50 border border-slate-100">
+<span class="text-[10px] text-slate-400 block">Banquet</span>
+<span class="text-xs font-bold text-amber-600">Booked</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Widget 3: Society Dues & Financial Clearance -->
+<div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white shadow-soft-sm space-y-4" data-purpose="dues-widget">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold uppercase tracking-wider text-slate-400">Society Dues</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-800">
+                ✓ All Clear
+              </span>
+</div>
+<div>
+<p class="text-2xl font-black tracking-tight">$0.00 Outstanding</p>
+<p class="text-xs text-slate-400 mt-0.5">October 2024 Maintenance settled on Oct 03 via AutoPay</p>
+</div>
+<div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-base">🧾</span>
+<span>Next invoice due: Nov 01</span>
+</div>
+<button class="text-blue-400 font-bold hover:text-blue-300" type="button">Receipts →</button>
+</div>
+</div>
+</aside>
+<!-- END: RightSideWidgets -->
+</div>
+</div>
+</div>
+<!-- Micro Interactive Scripts -->
+<script data-purpose="simple-interactions">
+    // Add lightweight interactive ripple or click visual feedback on buttons
+    document.addEventListener('DOMContentLoaded', () => {
+      const reserveButtons = document.querySelectorAll('button');
+      reserveButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          if (btn.innerText.includes('Reserve Meal')) {
+            const originalText = btn.innerText;
+            btn.innerText = 'Reserved! ✓';
+            btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            btn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+            setTimeout(() => {
+              btn.innerText = originalText;
+              btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+              btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            }, 2500);
+          }
+        });
+      });
+    });
+  </script>
+</body></html>
