@@ -405,21 +405,30 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <!-- Glance Alert -->
-                  <div class="p-4 rounded-3xl bg-rose-50/80 border border-rose-200/80 space-y-2">
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">Urgent Alert</span>
-                    <h4 class="text-xs font-bold text-slate-900">Elevator #2 Maintenance</h4>
+                  <div onclick="ncApp.navigateTo('feeds')" class="p-4 rounded-3xl bg-rose-50/80 border border-rose-200/80 space-y-2 cursor-pointer hover:shadow-md hover:border-rose-300 transition-all group" title="Click to view Priority Resident Feeds">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">Urgent Alert</span>
+                      <span class="text-[10px] text-rose-500 font-bold group-hover:translate-x-0.5 transition-transform">View →</span>
+                    </div>
+                    <h4 class="text-xs font-bold text-slate-900 group-hover:text-rose-700 transition-colors">Elevator #2 Maintenance</h4>
                     <p class="text-[11px] text-slate-600">Shutdown today 2:00 PM - 4:00 PM for cable recertification.</p>
                   </div>
                   <!-- Glance Homestyle Meal -->
-                  <div class="p-4 rounded-3xl bg-amber-50/80 border border-amber-200/80 space-y-2">
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Homestyle Meal • ₹50</span>
-                    <h4 class="text-xs font-bold text-slate-900">Sunita Aunty's Dal Khichdi</h4>
+                  <div onclick="ncApp.openKitchenPaymentModal('dish-khichdi')" class="p-4 rounded-3xl bg-amber-50/80 border border-amber-200/80 space-y-2 cursor-pointer hover:shadow-md hover:border-amber-300 transition-all group" title="Click to reserve Sunita Aunty's Dal Khichdi">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Homestyle Meal • ₹50</span>
+                      <span class="text-[10px] text-amber-600 font-bold group-hover:translate-x-0.5 transition-transform">Order →</span>
+                    </div>
+                    <h4 class="text-xs font-bold text-slate-900 group-hover:text-amber-700 transition-colors">Sunita Aunty's Dal Khichdi</h4>
                     <p class="text-[11px] text-slate-600">Fresh ghee khichdi + roasted papad &amp; pickle ready at 1:15 PM.</p>
                   </div>
                   <!-- Glance Utility -->
-                  <div class="p-4 rounded-3xl bg-blue-50/80 border border-blue-200/80 space-y-2">
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Utility Available</span>
-                    <h4 class="text-xs font-bold text-slate-900">6-Step Ladder &amp; Drill</h4>
+                  <div onclick="ncApp.openBorrowModal('ladder')" class="p-4 rounded-3xl bg-blue-50/80 border border-blue-200/80 space-y-2 cursor-pointer hover:shadow-md hover:border-blue-300 transition-all group" title="Click to borrow 6-Step Ladder">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Utility Available</span>
+                      <span class="text-[10px] text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Borrow →</span>
+                    </div>
+                    <h4 class="text-xs font-bold text-slate-900 group-hover:text-blue-700 transition-colors">6-Step Ladder &amp; Drill</h4>
                     <p class="text-[11px] text-slate-600">Available to borrow from Flat 501 / Maintenance Desk.</p>
                   </div>
                 </div>
@@ -523,14 +532,28 @@
         <div id="view-feeds" class="page-view space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
             <div>
-              <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Priority Resident Feeds</h2>
-              <p class="text-xs text-slate-500">Categorical priority segregation of society broadcasts and announcements</p>
+              <div class="flex items-center gap-2">
+                <span class="text-xl">📢</span>
+                <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Priority Resident Feeds</h2>
+                <span class="bg-rose-100 text-rose-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wide">Live Society Broadcast</span>
+              </div>
+              <p class="text-xs text-slate-500">Categorical priority segregation of society broadcasts, council notices, and neighbor buzz</p>
             </div>
-            <div class="flex items-center gap-2">
-              <button onclick="ncApp.toggleFeedFilter()" class="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 transition cursor-pointer">
-                Filter: <span id="currentFilterLabel" class="text-blue-600">All Feeds</span>
+            
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0" id="feedFilters">
+              <button onclick="ncApp.filterFeeds('all', this)" class="feed-tab-btn px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold whitespace-nowrap shadow-xs cursor-pointer">
+                All Feeds
               </button>
-              <button onclick="ncApp.openBroadcastNoticeModal()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition cursor-pointer">
+              <button onclick="ncApp.filterFeeds('alerts', this)" class="feed-tab-btn px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold whitespace-nowrap transition cursor-pointer">
+                🚨 High Alerts
+              </button>
+              <button onclick="ncApp.filterFeeds('notices', this)" class="feed-tab-btn px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold whitespace-nowrap transition cursor-pointer">
+                📜 Notices
+              </button>
+              <button onclick="ncApp.filterFeeds('buzz', this)" class="feed-tab-btn px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold whitespace-nowrap transition cursor-pointer">
+                💬 Neighbor Buzz
+              </button>
+              <button onclick="ncApp.openBroadcastNoticeModal()" class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold whitespace-nowrap shadow-xs transition cursor-pointer">
                 + Broadcast Notice
               </button>
             </div>
@@ -547,17 +570,17 @@
                     <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
                     <h4 class="text-xs font-extrabold uppercase tracking-wider text-rose-900">High Alerts</h4>
                   </div>
-                  <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-100 text-rose-700">Urgent (2)</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-100 text-rose-700" id="alertCountBadge">Urgent (2)</span>
                 </div>
 
-                <div class="mt-4 space-y-3">
+                <div class="mt-4 space-y-3" id="alertsListContainer">
                   <div class="p-3.5 bg-white/95 rounded-2xl border border-rose-100 shadow-2xs space-y-2">
                     <div class="flex items-start justify-between gap-1">
                       <span class="text-xs font-bold text-slate-900 leading-tight">Elevator #2 Shutdown</span>
                       <span class="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded">Today</span>
                     </div>
                     <p class="text-[11px] text-slate-600">Maintenance shutdown today from 2:00 PM - 4:00 PM for cable recertification.</p>
-                    <button onclick="ncApp.acknowledgeNotice(this, 'Elevator #2 Shutdown')" class="w-full py-1.5 text-[11px] font-bold bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg transition cursor-pointer" type="button">
+                    <button id="btn-ack-elevator" onclick="ncApp.acknowledgeNotice(this, 'Elevator #2 Shutdown')" class="w-full py-1.5 text-[11px] font-bold bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg transition cursor-pointer" type="button">
                       Acknowledge Notice
                     </button>
                   </div>
@@ -570,7 +593,7 @@
                     <p class="text-[11px] text-slate-600">Overhead supply will pause 9 AM - 12 PM for quarterly chemical disinfection.</p>
                     <div class="flex justify-between items-center text-[10px] text-slate-400 pt-1">
                       <span>Facility Desk</span>
-                      <a class="text-rose-600 font-bold hover:underline" href="javascript:void(0)" onclick="ncApp.showToast('Calling Facility Desk: +91 98200 11223')">Call Desk</a>
+                      <button class="text-rose-600 font-bold hover:underline cursor-pointer" type="button" onclick="ncApp.callFacilityDesk()">Call Desk 📞</button>
                     </div>
                   </div>
                 </div>
@@ -578,7 +601,7 @@
 
               <div class="pt-4 mt-3 border-t border-rose-100/60">
                 <button onclick="ncApp.openEmergencyContactsModal()" class="text-xs font-bold text-rose-600 hover:text-rose-800 flex items-center justify-center w-full gap-1 cursor-pointer">
-                  <span>Emergency Contacts</span>
+                  <span>🚨 Emergency Contacts Directory</span>
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                 </button>
               </div>
@@ -595,33 +618,39 @@
                   <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-100 text-amber-800">Council</span>
                 </div>
 
-                <div class="mt-4 space-y-3">
+                <div class="mt-4 space-y-3" id="noticesListContainer">
                   <div class="p-3.5 bg-white/95 rounded-2xl border border-amber-100 shadow-2xs space-y-2">
                     <div class="flex items-start justify-between gap-1">
                       <span class="text-xs font-bold text-slate-900 leading-tight">AGM Renovation Voting</span>
                       <span class="text-[10px] text-amber-700 font-bold bg-amber-50 px-1.5 py-0.5 rounded">Voting Open</span>
                     </div>
                     <p class="text-[11px] text-slate-600">Electronic ballot opens this Friday for the Club Gym upgrade and squash court.</p>
-                    <button onclick="ncApp.openVotingModal()" class="w-full py-1.5 text-[11px] font-bold bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition shadow-2xs cursor-pointer" type="button">
+                    <button id="btn-agm-vote" onclick="ncApp.openVotingModal()" class="w-full py-1.5 text-[11px] font-bold bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition shadow-2xs cursor-pointer" type="button">
                       Cast Your Vote
                     </button>
                   </div>
 
                   <div class="p-3.5 bg-white/95 rounded-2xl border border-amber-100 shadow-2xs space-y-1.5">
-                    <span class="text-xs font-bold text-slate-900 leading-tight block">Visitor Bay 4 Resurfacing</span>
+                    <div class="flex items-start justify-between">
+                      <span class="text-xs font-bold text-slate-900 leading-tight block">Visitor Bay 4 Resurfacing</span>
+                      <span class="text-[10px] text-slate-400">3h ago</span>
+                    </div>
                     <p class="text-[11px] text-slate-600">Curing will finish Thursday. Please instruct guest vehicles to park in Bay 6.</p>
-                    <div class="text-[10px] text-slate-400 pt-1">
-                      <span>Estate Manager • Posted 3h ago</span>
+                    <div class="flex justify-between items-center text-[10px] pt-1">
+                      <span class="text-slate-400">Estate Manager</span>
+                      <button onclick="ncApp.openParkingBayModal()" class="text-amber-700 font-bold hover:underline cursor-pointer" type="button">
+                        View Alternate Bay 6 →
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="pt-4 mt-3 border-t border-amber-100/60">
-                <a onclick="ncApp.showToast('Archive: Showing 14 past circulars for 2026')" class="text-xs font-bold text-amber-700 hover:text-amber-900 flex items-center justify-center w-full gap-1 cursor-pointer" href="javascript:void(0)">
-                  <span>View Notice Archives</span>
+                <button onclick="ncApp.openNoticeArchivesModal()" class="text-xs font-bold text-amber-700 hover:text-amber-900 flex items-center justify-center w-full gap-1 cursor-pointer">
+                  <span>📜 View Notice Archives &amp; Circulars</span>
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -633,10 +662,10 @@
                     <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
                     <h4 class="text-xs font-extrabold uppercase tracking-wider text-indigo-900">Neighbor Buzz</h4>
                   </div>
-                  <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700">8 New</span>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-700" id="buzzCountBadge">8 New</span>
                 </div>
 
-                <div class="mt-4 space-y-3">
+                <div class="mt-4 space-y-3" id="buzzListContainer">
                   <div class="p-3.5 bg-white/95 rounded-2xl border border-indigo-100 shadow-2xs space-y-1.5">
                     <div class="flex items-center justify-between">
                       <span class="text-[10px] font-bold text-indigo-600">Lost &amp; Found</span>
@@ -644,7 +673,7 @@
                     </div>
                     <p class="text-xs font-bold text-slate-900 leading-snug">Blue carabiner keys near pool</p>
                     <p class="text-[11px] text-slate-600">Handed over to Security Guard Ramesh at Gate 1.</p>
-                    <button onclick="ncApp.showToast('Item Claim Token #8821 generated for Guard Ramesh')" class="text-[11px] text-blue-600 font-bold hover:underline cursor-pointer" type="button">
+                    <button id="btn-claim-keys" onclick="ncApp.openClaimItemModal()" class="text-[11px] text-blue-600 font-bold hover:underline cursor-pointer" type="button">
                       Claim Item →
                     </button>
                   </div>
@@ -656,18 +685,18 @@
                     </div>
                     <p class="text-xs font-bold text-slate-900 leading-snug">Rohan (Flat 201) to Tech Park</p>
                     <p class="text-[11px] text-slate-600">Leaving 8:45 AM Mon-Fri. 2 seats open in EV sedan.</p>
-                    <button onclick="ncApp.showToast('Contacting Rohan (Flat 201) via Intercom')" class="w-full py-1 text-[11px] font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg transition cursor-pointer" type="button">
-                      Connect with Rohan
+                    <button id="btn-carpool-rohan" onclick="ncApp.openCarpoolModal()" class="w-full py-1 text-[11px] font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg transition cursor-pointer" type="button">
+                      Connect with Rohan (2 Seats Open)
                     </button>
                   </div>
                 </div>
               </div>
 
               <div class="pt-4 mt-3 border-t border-indigo-100/60">
-                <a onclick="ncApp.showToast('Community Chat: 42 active residents online')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center justify-center w-full gap-1 cursor-pointer" href="javascript:void(0)">
-                  <span>Open Community Chat</span>
+                <button onclick="ncApp.openCommunityChatModal()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center justify-center w-full gap-1 cursor-pointer">
+                  <span>💬 Open Community Chat (42 Online)</span>
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -754,10 +783,10 @@
                     </span>
                     <span class="text-[11px] font-bold text-slate-800">Pure Veg</span>
                   </div>
-                  <div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
-                    Sunita Aunty (Flat 502)
+                  <div onclick="ncApp.openChefModal('Sunita Aunty')" class="absolute bottom-2.5 left-2.5 bg-black/65 hover:bg-black/90 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg cursor-pointer transition flex items-center gap-1 shadow-xs" title="Click to view Sunita Aunty's chef profile">
+                    <span>👩‍🍳 Sunita Aunty (Flat 502)</span>
                   </div>
-                  <div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+                  <div onclick="ncApp.openDishReviewsModal('dish-khichdi')" class="absolute top-2.5 right-2.5 bg-white/95 hover:bg-white px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1 cursor-pointer transition hover:shadow-xs" title="Click to view verified neighbor reviews">
                     <span>★ 4.9</span>
                     <span class="text-slate-400 font-normal">(34)</span>
                   </div>
@@ -797,10 +826,10 @@
                     </span>
                     <span class="text-[11px] font-bold text-slate-800">Fresh Tiffin</span>
                   </div>
-                  <div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
-                    Priya (Flat 304)
+                  <div onclick="ncApp.openChefModal('Priya')" class="absolute bottom-2.5 left-2.5 bg-black/65 hover:bg-black/90 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg cursor-pointer transition flex items-center gap-1 shadow-xs" title="Click to view Priya's chef profile">
+                    <span>👩‍🍳 Priya (Flat 304)</span>
                   </div>
-                  <div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+                  <div onclick="ncApp.openDishReviewsModal('dish-phulka')" class="absolute top-2.5 right-2.5 bg-white/95 hover:bg-white px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1 cursor-pointer transition hover:shadow-xs" title="Click to view verified neighbor reviews">
                     <span>★ 5.0</span>
                     <span class="text-slate-400 font-normal">(42)</span>
                   </div>
@@ -840,10 +869,10 @@
                     </span>
                     <span class="text-[11px] font-bold text-slate-800">South Indian</span>
                   </div>
-                  <div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
-                    Meenakshi (Flat 208)
+                  <div onclick="ncApp.openChefModal('Meenakshi')" class="absolute bottom-2.5 left-2.5 bg-black/65 hover:bg-black/90 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg cursor-pointer transition flex items-center gap-1 shadow-xs" title="Click to view Meenakshi's chef profile">
+                    <span>👩‍🍳 Meenakshi (Flat 208)</span>
                   </div>
-                  <div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+                  <div onclick="ncApp.openDishReviewsModal('dish-idli')" class="absolute top-2.5 right-2.5 bg-white/95 hover:bg-white px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1 cursor-pointer transition hover:shadow-xs" title="Click to view verified neighbor reviews">
                     <span>★ 4.9</span>
                     <span class="text-slate-400 font-normal">(51)</span>
                   </div>
@@ -883,10 +912,10 @@
                     </span>
                     <span class="text-[11px] font-bold text-slate-800">Gujarati Snack</span>
                   </div>
-                  <div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
-                    Kokilaben (Flat 401)
+                  <div onclick="ncApp.openChefModal('Kokilaben')" class="absolute bottom-2.5 left-2.5 bg-black/65 hover:bg-black/90 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg cursor-pointer transition flex items-center gap-1 shadow-xs" title="Click to view Kokilaben's chef profile">
+                    <span>👩‍🍳 Kokilaben (Flat 401)</span>
                   </div>
-                  <div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+                  <div onclick="ncApp.openDishReviewsModal('dish-thepla')" class="absolute top-2.5 right-2.5 bg-white/95 hover:bg-white px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1 cursor-pointer transition hover:shadow-xs" title="Click to view verified neighbor reviews">
                     <span>★ 4.8</span>
                     <span class="text-slate-400 font-normal">(29)</span>
                   </div>
@@ -926,10 +955,10 @@
                     </span>
                     <span class="text-[11px] font-bold text-slate-800">Homestyle Bowl</span>
                   </div>
-                  <div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
-                    Simran (Flat 602)
+                  <div onclick="ncApp.openChefModal('Simran')" class="absolute bottom-2.5 left-2.5 bg-black/65 hover:bg-black/90 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg cursor-pointer transition flex items-center gap-1 shadow-xs" title="Click to view Simran's chef profile">
+                    <span>👩‍🍳 Simran (Flat 602)</span>
                   </div>
-                  <div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+                  <div onclick="ncApp.openDishReviewsModal('dish-rajma')" class="absolute top-2.5 right-2.5 bg-white/95 hover:bg-white px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1 cursor-pointer transition hover:shadow-xs" title="Click to view verified neighbor reviews">
                     <span>★ 4.9</span>
                     <span class="text-slate-400 font-normal">(48)</span>
                   </div>
@@ -969,10 +998,10 @@
                     </span>
                     <span class="text-[11px] font-bold text-slate-800">Quick Bite</span>
                   </div>
-                  <div class="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg">
-                    Neha (Flat 103)
+                  <div onclick="ncApp.openChefModal('Neha')" class="absolute bottom-2.5 left-2.5 bg-black/65 hover:bg-black/90 backdrop-blur-xs text-white text-[11px] font-medium px-2 py-0.5 rounded-lg cursor-pointer transition flex items-center gap-1 shadow-xs" title="Click to view Neha's chef profile">
+                    <span>👩‍🍳 Neha (Flat 103)</span>
                   </div>
-                  <div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+                  <div onclick="ncApp.openDishReviewsModal('dish-poha')" class="absolute top-2.5 right-2.5 bg-white/95 hover:bg-white px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1 cursor-pointer transition hover:shadow-xs" title="Click to view verified neighbor reviews">
                     <span>★ 4.8</span>
                     <span class="text-slate-400 font-normal">(18)</span>
                   </div>
@@ -2367,6 +2396,605 @@
     </div>
   </div>
 
+  <!-- 4.4 BROADCAST SOCIETY NOTICE MODAL -->
+  <div id="broadcastNoticeModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">📢</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base">Broadcast Notice / Neighbor Buzz</h4>
+            <p class="text-xs text-slate-500">Post an alert, council notice, or neighbor request to Palm Heights</p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('broadcastNoticeModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Target Feed Category</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="flex items-center gap-2 p-2 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100">
+              <input type="radio" name="broadcastCategory" value="alerts" class="text-rose-600 focus:ring-rose-500">
+              <span class="font-bold text-slate-800">🚨 High Alert</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100">
+              <input type="radio" name="broadcastCategory" value="notices" class="text-amber-600 focus:ring-amber-500">
+              <span class="font-bold text-slate-800">📜 Notice</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-xl border border-slate-200 bg-slate-50 cursor-pointer hover:bg-slate-100">
+              <input type="radio" name="broadcastCategory" value="buzz" checked class="text-indigo-600 focus:ring-indigo-500">
+              <span class="font-bold text-slate-800">💬 Buzz</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Post Title</label>
+          <input type="text" id="broadcastTitle" placeholder="e.g. Lost Cat / Book Club Meeting / Carpool" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-semibold text-slate-900" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Tag / Label</label>
+            <input type="text" id="broadcastTag" placeholder="e.g. Lost & Found, Carpool, Advisory" value="Neighbor Buzz" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-semibold text-slate-800" />
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">Author Identity</label>
+            <input type="text" id="broadcastAuthor" value="Alex Morgan (Flat 402-B)" readonly class="w-full rounded-xl border-slate-200 bg-slate-100 py-2 px-3 font-semibold text-slate-600" />
+          </div>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Notice / Message Content</label>
+          <textarea id="broadcastContent" rows="3" placeholder="Provide full context, timing, contact info or instructions for neighbors..." class="w-full rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-medium text-slate-800"></textarea>
+        </div>
+
+        <div class="p-3 rounded-2xl bg-blue-50/80 border border-blue-100 text-[11px] text-blue-800 flex items-center gap-2">
+          <span>ℹ️</span>
+          <span>Broadcast will be published live to the selected feed column and notified to online residents.</span>
+        </div>
+
+        <button onclick="ncApp.publishBroadcastNotice()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl shadow-md transition cursor-pointer">
+          Broadcast Notice to Society Feed
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.5 EMERGENCY CONTACTS DIRECTORY MODAL -->
+  <div id="emergencyContactsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-rose-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-rose-100">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🚨</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base">Emergency Contacts Directory</h4>
+            <p class="text-xs text-rose-700 font-medium">Palm Heights 24x7 Security &amp; Services</p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('emergencyContactsModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+        <!-- Security Gate 1 -->
+        <div class="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold text-lg shrink-0">
+              👮
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900">Security Gate #1 (Main Station)</h5>
+              <p class="text-[11px] text-slate-500">Officer Ramesh • Intercom Ext: 101</p>
+            </div>
+          </div>
+          <button onclick="ncApp.callIntercom('Security Gate #1 Station', '101', '+91 98200 11201')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer">
+            <span>📞</span> Call 101
+          </button>
+        </div>
+
+        <!-- Facility Desk -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-lg shrink-0">
+              🛠️
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900">Facility Maintenance Desk</h5>
+              <p class="text-[11px] text-slate-500">Supervisor Rajesh • Intercom Ext: 102</p>
+            </div>
+          </div>
+          <button onclick="ncApp.callIntercom('Facility Maintenance Desk', '102', '+91 98200 11202')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer">
+            <span>📞</span> Call 102
+          </button>
+        </div>
+
+        <!-- Electrician -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shrink-0">
+              ⚡
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900">24x7 Society Electrician</h5>
+              <p class="text-[11px] text-slate-500">Shyam (Shift Lead) • Intercom Ext: 105</p>
+            </div>
+          </div>
+          <button onclick="ncApp.callIntercom('Society Electrician', '105', '+91 98200 11205')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer">
+            <span>📞</span> Call 105
+          </button>
+        </div>
+
+        <!-- Plumber -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold text-lg shrink-0">
+              🔧
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900">24x7 Society Plumber</h5>
+              <p class="text-[11px] text-slate-500">Manoj • Intercom Ext: 106</p>
+            </div>
+          </div>
+          <button onclick="ncApp.callIntercom('Society Plumber', '106', '+91 98200 11206')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer">
+            <span>📞</span> Call 106
+          </button>
+        </div>
+
+        <!-- Medical Room -->
+        <div class="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-100 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg shrink-0">
+              🏥
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900">Medical Room &amp; Ambulance Desk</h5>
+              <p class="text-[11px] text-slate-500">Sister Mary (Nurse on duty) • Intercom Ext: 108</p>
+            </div>
+          </div>
+          <button onclick="ncApp.callIntercom('Medical Room Nurse', '108', '+91 98200 11208')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer">
+            <span>📞</span> Call 108
+          </button>
+        </div>
+
+        <!-- RWA President -->
+        <div class="p-3.5 rounded-2xl bg-indigo-50/60 border border-indigo-100 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shrink-0">
+              👔
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900">RWA President (Mr. K. Kapoor)</h5>
+              <p class="text-[11px] text-slate-500">Flat 1201 (Tower A) • Intercom Ext: 201</p>
+            </div>
+          </div>
+          <button onclick="ncApp.callIntercom('RWA President Mr. Kapoor', '201', '+91 98200 22201')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center gap-1 cursor-pointer">
+            <span>📞</span> Call 201
+          </button>
+        </div>
+      </div>
+
+      <button onclick="ncApp.closeModal('emergencyContactsModal')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer">
+        Close Directory
+      </button>
+    </div>
+  </div>
+
+  <!-- 4.6 INTERCOM SIMULATED CALL MODAL -->
+  <div id="intercomCallModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-slate-900 text-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-700 space-y-5 animate-in fade-in zoom-in-95 duration-200 text-center">
+      <div class="flex items-center justify-between text-xs text-slate-400">
+        <span class="flex items-center gap-1.5 font-bold text-emerald-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          VoIP Society Intercom
+        </span>
+        <span id="intercomCallTimer" class="font-mono font-bold text-white">00:04</span>
+      </div>
+
+      <div class="py-4 space-y-3">
+        <div class="relative w-20 h-20 mx-auto rounded-full bg-slate-800 border-2 border-emerald-500 flex items-center justify-center text-3xl shadow-lg">
+          <span id="intercomCallAvatar">📞</span>
+        </div>
+        <div>
+          <h4 class="font-extrabold text-lg text-white" id="intercomTargetName">Facility Maintenance Desk</h4>
+          <p class="text-xs text-slate-400 mt-0.5" id="intercomTargetExt">Ext 102 • Connecting from Flat 402-B</p>
+          <span class="inline-block mt-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold" id="intercomCallStatus">
+            Connected • HD Audio Call
+          </span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button id="btn-intercom-mute" onclick="ncApp.toggleIntercomMute(this)" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>🎤</span> <span id="intercomMuteLabel">Mute</span>
+        </button>
+        <button id="btn-intercom-speaker" onclick="ncApp.toggleIntercomSpeaker(this)" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>🔊</span> <span id="intercomSpeakerLabel">Speaker</span>
+        </button>
+      </div>
+
+      <button onclick="ncApp.endIntercomCall()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+        <span>🛑</span> End Intercom Call
+      </button>
+    </div>
+  </div>
+
+  <!-- 4.7 CLAIM LOST ITEM MODAL -->
+  <div id="claimItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-indigo-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-indigo-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🔑</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base">Claim Lost Property</h4>
+            <p class="text-xs text-indigo-700 font-medium">Security Station Item #LF-2026-94</p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('claimItemModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs">
+        <div class="flex justify-between font-bold text-slate-800">
+          <span>Item:</span>
+          <span>Blue Carabiner Keys (3 keys + RFID Fob)</span>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>Location Found:</span>
+          <span>Near Swimming Pool Deck</span>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>Safekept At:</span>
+          <span>Security Gate #1 (Guard Ramesh)</span>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Confirm Specific Identifying Detail</label>
+          <input type="text" id="claimItemVerifyNote" placeholder="e.g. Godrej key with red marker or flat number on fob..." class="w-full rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-semibold text-slate-900" />
+        </div>
+
+        <div id="claimPassContainer" class="hidden p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1 text-center">
+          <span class="text-[10px] font-black uppercase text-emerald-800 tracking-wider">Gate 1 Verification Pass</span>
+          <div class="font-mono font-black text-lg text-emerald-700" id="claimPassCode">CLAIM-PASS-8821</div>
+          <p class="text-[11px] text-emerald-600">Show this pass to Guard Ramesh at Gate #1 to collect your keys.</p>
+        </div>
+
+        <button id="btn-submit-claim" onclick="ncApp.confirmClaimItem()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-md transition cursor-pointer">
+          Verify &amp; Generate Claim Pass
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.8 CARPOOL REQUEST MODAL -->
+  <div id="carpoolModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-indigo-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-indigo-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🚗</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base">Rohan's Daily Carpool</h4>
+            <p class="text-xs text-indigo-700 font-medium">Flat 201 • Tech Park Route</p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('carpoolModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-1.5 text-xs">
+        <div class="flex justify-between font-bold text-slate-900">
+          <span>Vehicle:</span>
+          <span>Tata Nexon EV (White) • MH 02 CD 4492</span>
+        </div>
+        <div class="flex justify-between text-slate-600">
+          <span>Departure:</span>
+          <span class="font-bold text-indigo-700">8:45 AM (Mon - Fri)</span>
+        </div>
+        <div class="flex justify-between text-slate-600">
+          <span>Route:</span>
+          <span>Gate 1 ➔ Outer Ring Road ➔ EcoWorld Phase 2</span>
+        </div>
+        <div class="flex justify-between text-slate-600">
+          <span>Available Capacity:</span>
+          <span class="font-bold text-emerald-600">2 Seats Open</span>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Seats Requested</label>
+          <select id="carpoolSeatsSelect" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-bold text-slate-800">
+            <option value="1">1 Seat (Alex Morgan - Flat 402-B)</option>
+            <option value="2">2 Seats (Alex Morgan + 1 Family Member)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Pickup Location inside Society</label>
+          <select id="carpoolPickupSelect" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-semibold text-slate-800">
+            <option value="Tower B Main Lobby (Basement P1)">Tower B Main Lobby (Basement P1)</option>
+            <option value="Society Main Gate #1 Station">Society Main Gate #1 Station</option>
+            <option value="Clubhouse Roundabout">Clubhouse Roundabout</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">Note for Rohan (Optional)</label>
+          <input type="text" id="carpoolNote" placeholder="e.g. Will be waiting at lobby at 8:40 AM with laptop bag" class="w-full rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-semibold text-slate-800" />
+        </div>
+
+        <button onclick="ncApp.confirmCarpoolRequest()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-md transition cursor-pointer">
+          Send Seat Request to Rohan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.9 VISITOR PARKING BAY 6 GUIDANCE MODAL -->
+  <div id="parkingBayModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-amber-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🅿️</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base">Visitor Parking Bay Guidance</h4>
+            <p class="text-xs text-amber-700 font-medium">Basement Level P1 • Alternate Bay Allocation</p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('parkingBayModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2 text-xs">
+        <p class="text-slate-700 font-medium">
+          Due to scheduled epoxy concrete curing on Bays 1 through 4, visitor vehicles for Flat 402-B are routed to:
+        </p>
+        <div class="p-3 rounded-xl bg-white border border-amber-200 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Assigned Designated Bay</span>
+            <h5 class="text-base font-black text-amber-700">BAY #6 (Near Tower B Lift Lobby)</h5>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs">
+            ACTIVE &amp; RESERVED
+          </span>
+        </div>
+      </div>
+
+      <!-- Graphical Bay Map -->
+      <div class="p-3 bg-slate-900 rounded-2xl space-y-2 text-white">
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block text-center">Basement P1 Visitor Bay Grid</span>
+        <div class="grid grid-cols-4 gap-2 text-center text-xs font-bold">
+          <div class="p-2 rounded-lg bg-rose-950/80 border border-rose-800 text-rose-300 opacity-60">Bay 1<br><span class="text-[9px]">Curing</span></div>
+          <div class="p-2 rounded-lg bg-rose-950/80 border border-rose-800 text-rose-300 opacity-60">Bay 2<br><span class="text-[9px]">Curing</span></div>
+          <div class="p-2 rounded-lg bg-rose-950/80 border border-rose-800 text-rose-300 opacity-60">Bay 3<br><span class="text-[9px]">Curing</span></div>
+          <div class="p-2 rounded-lg bg-rose-950/80 border border-rose-800 text-rose-300 opacity-60">Bay 4<br><span class="text-[9px]">Curing</span></div>
+          <div class="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400">Bay 5<br><span class="text-[9px]">Taken</span></div>
+          <div class="p-2 rounded-lg bg-emerald-600 border-2 border-emerald-400 text-white shadow-lg animate-pulse">Bay 6<br><span class="text-[9px]">YOURS</span></div>
+          <div class="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400">Bay 7<br><span class="text-[9px]">Free</span></div>
+          <div class="p-2 rounded-lg bg-slate-800 border border-slate-700 text-slate-400">Bay 8<br><span class="text-[9px]">Free</span></div>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="ncApp.showToast('✓ Bay 6 directions link copied to clipboard!'); ncApp.closeModal('parkingBayModal');" class="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition cursor-pointer">
+          Share Bay 6 Navigation Link with Visitor
+        </button>
+        <button onclick="ncApp.closeModal('parkingBayModal')" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer">
+          Close Guidance
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.10 NOTICE ARCHIVES & OFFICIAL CIRCULARS MODAL -->
+  <div id="noticeArchivesModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-amber-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-amber-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📜</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base">Society Notice Archives &amp; Circulars</h4>
+            <p class="text-xs text-amber-700 font-medium">Official Palm Heights RWA Repository</p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('noticeArchivesModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+        <!-- Archive 1 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold">Circular #2026-48</span>
+              <h5 class="text-xs font-bold text-slate-900 mt-1">Annual Fire Sprinkler &amp; Hydrant Safety Audit Report</h5>
+              <p class="text-[11px] text-slate-500">Issued by Fire Safety Directorate • Oct 04, 2026</p>
+            </div>
+            <button onclick="ncApp.showToast('Downloaded Circular #48: Fire_Safety_Audit_2026.pdf (1.2 MB)')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition shrink-0 cursor-pointer">
+              Download PDF 📥
+            </button>
+          </div>
+        </div>
+
+        <!-- Archive 2 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">Circular #2026-47</span>
+              <h5 class="text-xs font-bold text-slate-900 mt-1">Club Gymnasium Upgradation Tender Specifications</h5>
+              <p class="text-[11px] text-slate-500">Issued by Sports Committee • Sep 22, 2026</p>
+            </div>
+            <button onclick="ncApp.showToast('Downloaded Circular #47: Gym_Upgradation_Tender.pdf (2.4 MB)')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition shrink-0 cursor-pointer">
+              Download PDF 📥
+            </button>
+          </div>
+        </div>
+
+        <!-- Archive 3 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Circular #2026-46</span>
+              <h5 class="text-xs font-bold text-slate-900 mt-1">Solar Rooftop Net-Metering Grid Approval from Electricity Board</h5>
+              <p class="text-[11px] text-slate-500">Issued by Infrastructure Council • Aug 14, 2026</p>
+            </div>
+            <button onclick="ncApp.showToast('Downloaded Circular #46: Solar_Net_Metering_Approval.pdf (890 KB)')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition shrink-0 cursor-pointer">
+              Download PDF 📥
+            </button>
+          </div>
+        </div>
+
+        <!-- Archive 4 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[10px] font-bold">Circular #2026-45</span>
+              <h5 class="text-xs font-bold text-slate-900 mt-1">Monsoon Stormwater Drainage &amp; Basement Sump Pump Certification</h5>
+              <p class="text-[11px] text-slate-500">Issued by Maintenance Council • Jul 01, 2026</p>
+            </div>
+            <button onclick="ncApp.showToast('Downloaded Circular #45: Monsoon_Drainage_Audit.pdf (1.5 MB)')" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition shrink-0 cursor-pointer">
+              Download PDF 📥
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="ncApp.closeModal('noticeArchivesModal')" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition cursor-pointer">
+        Close Archives
+      </button>
+    </div>
+  </div>
+
+  <!-- 4.11 LIVE COMMUNITY CHAT MODAL -->
+  <div id="communityChatModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-indigo-200 space-y-4 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-indigo-100 shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">💬</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base">Community Buzz Chat</h4>
+            <p class="text-xs text-indigo-700 font-medium flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              42 Residents Online • Palm Heights Verified Group
+            </p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('communityChatModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Messages container -->
+      <div id="communityChatBox" class="flex-1 overflow-y-auto space-y-3 p-2 bg-slate-50 rounded-2xl border border-slate-200 text-xs min-h-[260px] max-h-[360px]">
+        <!-- Initial messages rendered via JS -->
+      </div>
+
+      <!-- Chat input -->
+      <div class="flex items-center gap-2 pt-1 shrink-0">
+        <input type="text" id="communityChatInput" onkeydown="if(event.key==='Enter') ncApp.sendCommunityChatMessage()" placeholder="Type a message to your neighbors..." class="flex-1 rounded-xl border-slate-200 bg-white py-2.5 px-3 text-xs font-semibold text-slate-800 focus:ring-indigo-500" />
+        <button onclick="ncApp.sendCommunityChatMessage()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition shrink-0 cursor-pointer">
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.12 HOMEKITCHEN CHEF PROFILE MODAL -->
+  <div id="chefModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-amber-100">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">👩‍🍳</span>
+          <div>
+            <h4 class="font-extrabold text-slate-900 text-base" id="chefModalName">Sunita Aunty</h4>
+            <p class="text-xs text-amber-700 font-medium" id="chefModalFlat">Flat 502 (Tower B)</p>
+          </div>
+        </div>
+        <button onclick="ncApp.closeModal('chefModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Trust Badges & Metrics -->
+      <div class="grid grid-cols-2 gap-2 text-center text-xs">
+        <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200">
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">Resident Rating</span>
+          <span class="font-extrabold text-amber-700 text-sm" id="chefModalRating">4.9 ★ (34 reviews)</span>
+        </div>
+        <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">Total Delivered</span>
+          <span class="font-extrabold text-emerald-700 text-sm" id="chefModalDelivered">342 Tiffins</span>
+        </div>
+      </div>
+
+      <div class="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex items-center gap-2 text-xs text-emerald-900 font-semibold">
+        <span>🛡️</span>
+        <span id="chefModalHygiene">99% Food Grade Hygiene Compliant • Zero Preservatives</span>
+      </div>
+
+      <div>
+        <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wide mb-1">Chef Story &amp; Philosophy</h5>
+        <p class="text-xs text-slate-600 leading-relaxed" id="chefModalBio">
+          Resident of Palm Heights for 8 years. Passionate about light, digestive, grandmother-style sattvic home food with zero artificial colors or excess oil.
+        </p>
+      </div>
+
+      <div>
+        <h5 class="text-xs font-bold text-slate-800 uppercase tracking-wide mb-1.5">Signature Specialties</h5>
+        <div class="flex flex-wrap gap-1.5" id="chefModalSpecialties">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+        <button id="btn-chef-intercom" onclick="ncApp.callChefIntercom()" class="py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>📞</span> Intercom Call
+        </button>
+        <button id="btn-chef-reserve" onclick="ncApp.orderFromChefProfile()" class="py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs rounded-xl shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <span>🍲</span> Reserve Today's Meal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.13 HOMEKITCHEN DISH REVIEWS MODAL -->
+  <div id="dishReviewsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-amber-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
+      <div class="flex items-center justify-between pb-3 border-b border-amber-100">
+        <div>
+          <h4 class="font-extrabold text-slate-900 text-base" id="dishReviewsTitle">Homestyle Dal Khichdi</h4>
+          <p class="text-xs text-amber-700 font-medium" id="dishReviewsChef">Prepared by Sunita Aunty (Flat 502)</p>
+        </div>
+        <button onclick="ncApp.closeModal('dishReviewsModal')" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <!-- Rating summary banner -->
+      <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="text-3xl font-black text-amber-600" id="dishReviewsAvgDisplay">4.9</div>
+          <div>
+            <div class="text-amber-500 font-bold text-sm">★★★★★</div>
+            <p class="text-[11px] text-slate-500" id="dishReviewsCountDisplay">Based on 34 verified resident orders</p>
+          </div>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs">
+          100% Verified Neighbors
+        </span>
+      </div>
+
+      <!-- Neighbor Reviews List -->
+      <div id="dishReviewsList" class="space-y-2.5 max-h-[38vh] overflow-y-auto pr-1">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Quick Review Submission -->
+      <div class="pt-3 border-t border-slate-100 space-y-2 text-xs">
+        <label class="font-bold text-slate-700 block">Add Your Feedback as Flat 402-B</label>
+        <div class="flex gap-2">
+          <input type="text" id="newReviewInput" placeholder="Write quick review (e.g., Warm, authentic taste!)..." class="flex-1 rounded-xl border-slate-200 bg-slate-50 py-2 px-3 font-semibold text-slate-800" />
+          <button onclick="ncApp.submitDishReview()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-xs transition cursor-pointer">
+            Post Review
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 5. AGM Voting Modal -->
   <div id="votingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-4 animate-in fade-in zoom-in-95 duration-200">
@@ -2679,6 +3307,179 @@
 
       // Active kitchen orders
       activeKitchenOrders: [],
+
+      // Active chef profile modal state
+      activeChefData: null,
+      activeReviewDishId: null,
+      intercomInterval: null,
+
+      // Chefs database
+      chefsData: {
+        'Sunita Aunty': {
+          name: 'Sunita Aunty',
+          flat: 'Flat 502 (Tower B)',
+          dish: 'Homestyle Dal Khichdi + Papad & Achaar',
+          rating: '4.9 ★',
+          reviewsCount: 34,
+          mealsDelivered: '342 Tiffins',
+          hygieneScore: '99% Food Grade Hygiene Compliant',
+          specialties: ['Yellow Moong Khichdi', 'Kadhi Pakoda', 'Ghee Phulkas', 'Aam Ka Achaar'],
+          bio: 'Resident of Palm Heights for 8 years. Passionate about light, digestive, grandmother-style sattvic home food with zero artificial colors or excess oil.',
+          phone: '+91 98200 50201',
+          intercom: '502'
+        },
+        'Priya': {
+          name: 'Priya Sharma',
+          flat: 'Flat 304 (Tower A)',
+          dish: '4 Hot Phulkas + Aloo Gobhi Matar Subzi',
+          rating: '5.0 ★',
+          reviewsCount: 42,
+          mealsDelivered: '280 Tiffins',
+          hygieneScore: '100% Food Grade Hygiene Compliant',
+          specialties: ['Soft Phulkas', 'Aloo Gobhi Matar', 'Paneer Bhurji', 'Fresh Dahi Katori'],
+          bio: 'Software engineer turned home food enthusiast. Known across Tower A for paper-thin, soft phulkas that stay warm for hours.',
+          phone: '+91 98200 30401',
+          intercom: '304'
+        },
+        'Meenakshi': {
+          name: 'Meenakshi Iyer',
+          flat: 'Flat 208 (Tower C)',
+          dish: 'Steamed Idlis (4 Pcs) + Sambhar & Chutney',
+          rating: '4.9 ★',
+          reviewsCount: 51,
+          mealsDelivered: '410 Tiffins',
+          hygieneScore: '99% Food Grade Hygiene Compliant',
+          specialties: ['Malli Idlis', 'Madras Sambhar', 'Fresh Coconut Chutney', 'Filter Coffee'],
+          bio: 'Serving traditional South Indian breakfast prepared with stone-ground batter fermented naturally for 14 hours.',
+          phone: '+91 98200 20801',
+          intercom: '208'
+        },
+        'Kokilaben': {
+          name: 'Kokilaben Patel',
+          flat: 'Flat 401 (Tower B)',
+          dish: 'Fresh Methi Theplas (Pack of 5) + Chunda',
+          rating: '4.8 ★',
+          reviewsCount: 29,
+          mealsDelivered: '215 Packs',
+          hygieneScore: '98% Food Grade Hygiene Compliant',
+          specialties: ['Methi Thepla', 'Aam Ka Chunda', 'Khaman Dhokla', 'Handvo'],
+          bio: 'Cooks everyday Gujarati delicacies with authentic spices and fresh herbs sourced directly from organic farmers market.',
+          phone: '+91 98200 40101',
+          intercom: '401'
+        },
+        'Simran': {
+          name: 'Simran Kaur',
+          flat: 'Flat 602 (Tower A)',
+          dish: 'Homestyle Punjabi Rajma Chawal Bowl',
+          rating: '4.9 ★',
+          reviewsCount: 48,
+          mealsDelivered: '390 Bowls',
+          hygieneScore: '99% Food Grade Hygiene Compliant',
+          specialties: ['Jammu Rajma', 'Jeera Rice', 'Kadhi Chawal', 'Sirke Wale Pyaaz'],
+          bio: 'Brings authentic slow-simmered Punjabi comfort right to your doorstep with wholesome desi ghee tempering.',
+          phone: '+91 98200 60201',
+          intercom: '602'
+        },
+        'Neha': {
+          name: 'Neha Deshmukh',
+          flat: 'Flat 103 (Tower D)',
+          dish: 'Kanda Poha with Peanuts & Sev',
+          rating: '4.8 ★',
+          reviewsCount: 18,
+          mealsDelivered: '145 Plates',
+          hygieneScore: '98% Food Grade Hygiene Compliant',
+          specialties: ['Maharashtrian Kanda Poha', 'Sabudana Khichdi', 'Upma', 'Ginger Chai'],
+          bio: 'Loves whipping up nostalgic Maharashtrian breakfast and evening tea snacks for busy residents and students.',
+          phone: '+91 98200 10301',
+          intercom: '103'
+        },
+        'Alex Morgan': {
+          name: 'Alex Morgan',
+          flat: 'Flat 402-B (Tower B)',
+          dish: 'Special Resident Dish',
+          rating: '5.0 ★',
+          reviewsCount: 1,
+          mealsDelivered: '12 Tiffins',
+          hygieneScore: '100% Home Clean Kitchen Verified',
+          specialties: ['Special Homestyle Cuisine', 'Healthy Bowls'],
+          bio: 'Flat 402-B resident excited to contribute fresh homestyle cooking to the community kitchen exchange.',
+          phone: '+91 98200 40201',
+          intercom: '402'
+        }
+      },
+
+      // Dish reviews database
+      dishReviews: {
+        'dish-khichdi': {
+          title: 'Homestyle Dal Khichdi + Papad & Achaar',
+          chef: 'Sunita Aunty (Flat 502)',
+          rating: '4.9',
+          count: 34,
+          reviews: [
+            { author: 'Kavita Menon (Flat 702)', date: 'Yesterday', stars: 5, text: 'Reminds me of home! The ghee tadka and homemade aam ka achaar were simply perfect.' },
+            { author: 'Rahul Gupta (Flat 301)', date: '2 days ago', stars: 5, text: 'Very light on stomach after a long workday. Arrived piping hot in clean container.' },
+            { author: 'Anil Rao (Flat 105)', date: 'Last week', stars: 4, text: 'Great comforting khichdi, papad was crispy and not soggy.' }
+          ]
+        },
+        'dish-phulka': {
+          title: '4 Hot Phulkas + Aloo Gobhi Matar Subzi',
+          chef: 'Priya (Flat 304)',
+          rating: '5.0',
+          count: 42,
+          reviews: [
+            { author: 'Siddharth (Flat 804)', date: 'Today', stars: 5, text: 'Phulkas are so thin and soft, stayed fresh even 3 hours later. Subzi tasted like mom’s.' },
+            { author: 'Meera Sen (Flat 403)', date: '3 days ago', stars: 5, text: 'The dahi katori and aloo subzi combo was fabulous! Highly recommended.' }
+          ]
+        },
+        'dish-idli': {
+          title: 'Steamed Idlis (4 Pcs) + Sambhar & Chutney',
+          chef: 'Meenakshi (Flat 208)',
+          rating: '4.9',
+          count: 51,
+          reviews: [
+            { author: 'Venkatesh (Flat 902)', date: 'Yesterday', stars: 5, text: 'Authentic Madras drumstick sambhar! The idlis were as soft as cotton.' },
+            { author: 'Divya P. (Flat 102)', date: 'Last week', stars: 5, text: 'Fresh coconut chutney with curry leaves was top notch.' }
+          ]
+        },
+        'dish-thepla': {
+          title: 'Fresh Methi Theplas (Pack of 5) + Chunda',
+          chef: 'Kokilaben (Flat 401)',
+          rating: '4.8',
+          count: 29,
+          reviews: [
+            { author: 'Jignesh (Flat 504)', date: 'Yesterday', stars: 5, text: 'Perfect travel snack. The sweet mango chunda is delicious.' },
+            { author: 'Sneha (Flat 201)', date: '3 days ago', stars: 4, text: 'Very soft and tasty. Will order weekly!' }
+          ]
+        },
+        'dish-rajma': {
+          title: 'Homestyle Punjabi Rajma Chawal Bowl',
+          chef: 'Simran (Flat 602)',
+          rating: '4.9',
+          count: 48,
+          reviews: [
+            { author: 'Harpreet (Flat 705)', date: '2 days ago', stars: 5, text: 'Real Jammu rajma texture, not overly spiced with restaurant cream. Just authentic!' },
+            { author: 'Aditya (Flat 306)', date: 'Last Friday', stars: 5, text: 'Generous portion, loved the sliced onions and green chili.' }
+          ]
+        },
+        'dish-poha': {
+          title: 'Kanda Poha with Peanuts & Sev',
+          chef: 'Neha (Flat 103)',
+          rating: '4.8',
+          count: 18,
+          reviews: [
+            { author: 'Pooja (Flat 408)', date: 'Yesterday', stars: 5, text: 'Super fluffy poha with crisp peanuts and fresh lemon juice. Best 5 PM snack!' }
+          ]
+        }
+      },
+
+      // Community chat messages
+      communityChatMessages: [
+        { sender: 'Rohan Verma', flat: 'Flat 201', time: '8:12 AM', text: 'Leaving for Outer Ring Road / Tech Park at 8:45 AM, EV sedan has 2 seats open!' },
+        { sender: 'Dr. Vandana', flat: 'Flat 804', time: '8:25 AM', text: 'Good morning neighbors. Reminder that yoga sessions start at 7:00 AM at the terrace deck tomorrow.' },
+        { sender: 'Vikram Joshi', flat: 'Flat 302', time: '9:10 AM', text: 'Big thanks to Sunita Aunty for the hot dal khichdi today, truly wholesome meal!' },
+        { sender: 'Security Desk', flat: 'Gate #1', time: '9:40 AM', text: 'Keys with blue carabiner found near the pool area. Handed to security guard Ramesh.' },
+        { sender: 'Ananya S.', flat: 'Flat 105', time: '10:05 AM', text: 'Badminton court lights have been calibrated. Booking slots are open for the evening!' }
+      ],
 
       // Facility data and active reservations
       facilitiesData: {
@@ -3257,6 +4058,16 @@
           unitName: 'portions'
         };
 
+        this.dishReviews[dishId] = {
+          title: title,
+          chef: 'Alex Morgan (Flat 402-B)',
+          rating: '5.0',
+          count: 1,
+          reviews: [
+            { author: 'HomeKitchen Bot', date: 'Just now', stars: 5, text: 'Fresh dish listing verified by Palm Heights HomeKitchen™ Exchange!' }
+          ]
+        };
+
         const container = document.getElementById('kitchenGridContainer');
         if (container) {
           const cardHtml = `
@@ -3270,10 +4081,10 @@
                     </span>
                     <span class="text-[11px] font-bold text-slate-800">${diet}</span>
                   </div>
-                  <div class="absolute bottom-2.5 left-2.5 bg-blue-600/90 backdrop-blur-xs text-white text-[11px] font-bold px-2 py-0.5 rounded-lg">
-                    You (Flat 402-B)
+                  <div onclick="ncApp.openChefModal('Alex Morgan')" class="absolute bottom-2.5 left-2.5 bg-blue-600/90 hover:bg-blue-700 backdrop-blur-xs text-white text-[11px] font-bold px-2 py-0.5 rounded-lg cursor-pointer transition flex items-center gap-1 shadow-xs" title="Click to view chef profile">
+                    <span>👩‍🍳 You (Flat 402-B)</span>
                   </div>
-                  <div class="absolute top-2.5 right-2.5 bg-white/95 px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1">
+                  <div onclick="ncApp.openDishReviewsModal('${dishId}')" class="absolute top-2.5 right-2.5 bg-white/95 hover:bg-white px-2 py-0.5 rounded-xl text-[11px] font-bold text-amber-600 shadow-2xs flex items-center gap-1 cursor-pointer transition hover:shadow-xs" title="Click to view reviews">
                     <span>★ 5.0</span>
                     <span class="text-slate-400 font-normal">(New)</span>
                   </div>
@@ -3317,9 +4128,45 @@
         document.getElementById('duesLedgerBadge').innerText = 'Settled';
       },
 
+      // Download Statement
+      downloadStatement() {
+        this.showToast('✓ Downloaded FY 2026-27 Society Maintenance Statement PDF (Unit 402-B)');
+      },
+
+      // Switch Wing
+      switchWing() {
+        const wings = ['Wing A • Palm Tower', 'Wing B • Palm Crest', 'Wing C • Palm Heights'];
+        const wingEl = document.getElementById('currentWingLabel') || document.querySelector('[onclick*="switchWing"] span:last-child');
+        let current = wingEl ? wingEl.innerText : wings[0];
+        let nextIndex = (wings.findIndex(w => w.includes(current.slice(0, 6))) + 1) % wings.length;
+        if (nextIndex === -1) nextIndex = 1;
+        const nextWing = wings[nextIndex];
+        if (wingEl) wingEl.innerText = nextWing;
+        this.showToast(`Switched active tower: ${nextWing}`);
+      },
+
+      // SOS Alarm
+      triggerSosAlarm(type) {
+        this.closeModal('sosModal');
+        this.showToast(`🚨 HIGH PRIORITY SOS: "${type}" dispatched to Security Gate 1 & Facility Desk!`, 6000);
+      },
+
+      // Gate Pass Confirmation
+      confirmGatePass() {
+        this.closeModal('gatePassModal');
+        const passId = `GP-${Math.floor(1000 + Math.random() * 9000)}`;
+        this.showToast(`✓ Visitor Pass #${passId} generated & synced with Gate 1 RFID scanner!`, 5000);
+      },
+
       // Cast vote
       castVote(vote) {
         this.closeModal('votingModal');
+        const btn = document.getElementById('btn-agm-vote');
+        if (btn) {
+          btn.innerHTML = 'Voted (YES) ✓';
+          btn.className = 'w-full py-1.5 text-[11px] font-bold bg-emerald-600 text-white rounded-lg transition shadow-2xs cursor-default';
+          btn.disabled = true;
+        }
         this.showToast(`Ballot cast: ${vote}. Encrypted vote registered with RWA!`, 4000);
       },
 
@@ -3327,8 +4174,396 @@
       acknowledgeNotice(btn, title) {
         btn.innerText = 'Acknowledged ✓';
         btn.classList.remove('bg-rose-50', 'text-rose-700', 'hover:bg-rose-100');
-        btn.classList.add('bg-emerald-50', 'text-emerald-700');
+        btn.classList.add('bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-200');
+        const badge = document.getElementById('alertCountBadge');
+        if (badge) badge.innerText = 'Urgent (1)';
         this.showToast(`Acknowledged: "${title}"`);
+      },
+
+      // Feed Filters
+      filterFeeds(cat, btn) {
+        document.querySelectorAll('.feed-tab-btn').forEach(b => {
+          b.classList.remove('bg-slate-900', 'text-white');
+          b.classList.add('bg-slate-100', 'text-slate-700');
+        });
+        if (btn) {
+          btn.classList.remove('bg-slate-100', 'text-slate-700');
+          btn.classList.add('bg-slate-900', 'text-white');
+        }
+
+        const cards = document.querySelectorAll('.feed-column-card');
+        cards.forEach(card => {
+          const cardCat = card.getAttribute('data-category');
+          if (cat === 'all' || cardCat === cat) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      },
+
+      // Broadcast Notice Modal & Publisher
+      openBroadcastNoticeModal() {
+        this.openModal('broadcastNoticeModal');
+      },
+
+      publishBroadcastNotice() {
+        const catInput = document.querySelector('input[name="broadcastCategory"]:checked');
+        const cat = catInput ? catInput.value : 'buzz';
+        const title = (document.getElementById('broadcastTitle') && document.getElementById('broadcastTitle').value.trim()) || 'Society Update from Flat 402-B';
+        const tag = (document.getElementById('broadcastTag') && document.getElementById('broadcastTag').value.trim()) || 'Notice';
+        const content = (document.getElementById('broadcastContent') && document.getElementById('broadcastContent').value.trim()) || 'Important communication shared with the community.';
+
+        let containerId = 'buzzListContainer';
+        let badgeClass = 'text-indigo-600 bg-indigo-50';
+        let borderClass = 'border-indigo-100';
+
+        if (cat === 'alerts') {
+          containerId = 'alertsListContainer';
+          badgeClass = 'text-rose-600 bg-rose-50';
+          borderClass = 'border-rose-100';
+          const alertBadge = document.getElementById('alertCountBadge');
+          if (alertBadge) alertBadge.innerText = 'Urgent (3)';
+        } else if (cat === 'notices') {
+          containerId = 'noticesListContainer';
+          badgeClass = 'text-amber-700 bg-amber-50';
+          borderClass = 'border-amber-100';
+        } else {
+          const buzzBadge = document.getElementById('buzzCountBadge');
+          if (buzzBadge) buzzBadge.innerText = '9 New';
+        }
+
+        const container = document.getElementById(containerId);
+        if (container) {
+          const newCard = document.createElement('div');
+          newCard.className = `p-3.5 bg-white/95 rounded-2xl border ${borderClass} shadow-2xs space-y-1.5 animate-in fade-in`;
+          newCard.innerHTML = `
+            <div class="flex items-start justify-between gap-1">
+              <span class="text-xs font-bold text-slate-900 leading-tight">${title}</span>
+              <span class="text-[10px] font-bold ${badgeClass} px-1.5 py-0.5 rounded">Just now</span>
+            </div>
+            <p class="text-[11px] text-slate-600">${content}</p>
+            <div class="flex justify-between items-center text-[10px] text-slate-400 pt-1">
+              <span>Alex Morgan (Flat 402-B)</span>
+              <span class="text-emerald-600 font-bold">Broadcast Live ✓</span>
+            </div>
+          `;
+          container.insertBefore(newCard, container.firstChild);
+        }
+
+        this.closeModal('broadcastNoticeModal');
+        this.showToast(`📢 Broadcast "${title}" published to society feed!`, 5000);
+      },
+
+      // Facility Desk Shortcut
+      callFacilityDesk() {
+        this.callIntercom('Facility Maintenance Desk', '102', '+91 98200 11202');
+      },
+
+      // Emergency Contacts
+      openEmergencyContactsModal() {
+        this.openModal('emergencyContactsModal');
+      },
+
+      // Voting Modal
+      openVotingModal() {
+        this.openModal('votingModal');
+      },
+
+      // Notice Archives
+      openNoticeArchivesModal() {
+        this.openModal('noticeArchivesModal');
+      },
+
+      // Parking Bay Guidance
+      openParkingBayModal() {
+        this.openModal('parkingBayModal');
+      },
+
+      // Claim Item Handlers
+      openClaimItemModal() {
+        const container = document.getElementById('claimPassContainer');
+        if (container) container.classList.add('hidden');
+        const btn = document.getElementById('btn-submit-claim');
+        if (btn) {
+          btn.innerText = 'Verify & Generate Claim Pass';
+          btn.disabled = false;
+          btn.className = 'w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-md transition cursor-pointer';
+        }
+        this.openModal('claimItemModal');
+      },
+
+      confirmClaimItem() {
+        const container = document.getElementById('claimPassContainer');
+        if (container) container.classList.remove('hidden');
+        const btn = document.getElementById('btn-submit-claim');
+        if (btn) {
+          btn.innerText = 'Claim Registered ✓';
+          btn.disabled = true;
+          btn.className = 'w-full py-3 bg-emerald-600 text-white font-extrabold rounded-xl shadow-md transition cursor-default';
+        }
+        const feedBtn = document.getElementById('btn-claim-keys');
+        if (feedBtn) {
+          feedBtn.innerText = 'Claim Registered (Pass #8821) ✓';
+          feedBtn.className = 'text-[11px] text-emerald-600 font-bold';
+        }
+        this.showToast('Security verification passed: Claim Pass #8821 generated for Gate 1!', 5000);
+      },
+
+      // Carpool Handlers
+      openCarpoolModal() {
+        this.openModal('carpoolModal');
+      },
+
+      confirmCarpoolRequest() {
+        const seats = document.getElementById('carpoolSeatsSelect') ? document.getElementById('carpoolSeatsSelect').value : '1';
+        const pickup = document.getElementById('carpoolPickupSelect') ? document.getElementById('carpoolPickupSelect').value : 'Tower B Lobby';
+        this.closeModal('carpoolModal');
+        const feedBtn = document.getElementById('btn-carpool-rohan');
+        if (feedBtn) {
+          feedBtn.innerText = `Seat Requested (${seats} Seat, ${pickup}) ✓`;
+          feedBtn.className = 'w-full py-1 text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg transition';
+          feedBtn.disabled = true;
+        }
+        this.showToast(`✓ Carpool seat request sent to Rohan! Pickup: ${pickup}`, 5000);
+      },
+
+      // Community Buzz Chat
+      openCommunityChatModal() {
+        this.renderCommunityChat();
+        this.openModal('communityChatModal');
+        setTimeout(() => {
+          const box = document.getElementById('communityChatBox');
+          if (box) box.scrollTop = box.scrollHeight;
+          const input = document.getElementById('communityChatInput');
+          if (input) input.focus();
+        }, 100);
+      },
+
+      renderCommunityChat() {
+        const box = document.getElementById('communityChatBox');
+        if (!box) return;
+        box.innerHTML = this.communityChatMessages.map(msg => {
+          const isMe = msg.sender.includes('Alex Morgan');
+          return `
+            <div class="flex items-start gap-2.5 ${isMe ? 'flex-row-reverse' : ''}">
+              <div class="w-7 h-7 rounded-full ${isMe ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-700'} flex items-center justify-center font-bold text-[10px] shrink-0">
+                ${msg.sender.charAt(0)}
+              </div>
+              <div class="max-w-[78%] space-y-0.5">
+                <div class="flex items-center gap-1.5 text-[10px] text-slate-400 ${isMe ? 'justify-end' : ''}">
+                  <strong class="text-slate-700 font-bold">${msg.sender}</strong>
+                  <span>•</span>
+                  <span>${msg.flat}</span>
+                  <span>•</span>
+                  <span>${msg.time}</span>
+                </div>
+                <div class="p-2.5 rounded-2xl ${isMe ? 'bg-indigo-600 text-white rounded-tr-xs' : 'bg-white border border-slate-200 text-slate-800 rounded-tl-xs'} text-xs font-medium shadow-2xs leading-relaxed">
+                  ${msg.text}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      sendCommunityChatMessage() {
+        const input = document.getElementById('communityChatInput');
+        if (!input || !input.value.trim()) return;
+        const text = input.value.trim();
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        this.communityChatMessages.push({
+          sender: 'Alex Morgan',
+          flat: 'Flat 402-B',
+          time: timeStr,
+          text: text
+        });
+        input.value = '';
+        this.renderCommunityChat();
+        const box = document.getElementById('communityChatBox');
+        if (box) box.scrollTop = box.scrollHeight;
+      },
+
+      // Intercom VoIP Calling Handlers
+      callIntercom(name, ext, phone) {
+        this.closeModal('emergencyContactsModal');
+        const nameEl = document.getElementById('intercomTargetName');
+        const extEl = document.getElementById('intercomTargetExt');
+        const statusEl = document.getElementById('intercomCallStatus');
+        if (nameEl) nameEl.innerText = name;
+        if (extEl) extEl.innerText = `Ext: ${ext} • Connecting with Flat 402-B`;
+        if (statusEl) statusEl.innerText = 'Connected • HD Audio Call';
+        this.startIntercomTimer();
+        this.openModal('intercomCallModal');
+        this.showToast(`Intercom calling: ${name} (Ext ${ext})...`);
+      },
+
+      startIntercomTimer() {
+        if (this.intercomInterval) clearInterval(this.intercomInterval);
+        let sec = 1;
+        const timerEl = document.getElementById('intercomCallTimer');
+        if (timerEl) timerEl.innerText = '00:01';
+        this.intercomInterval = setInterval(() => {
+          sec++;
+          const m = String(Math.floor(sec / 60)).padStart(2, '0');
+          const s = String(sec % 60).padStart(2, '0');
+          if (timerEl) timerEl.innerText = `${m}:${s}`;
+        }, 1000);
+      },
+
+      toggleIntercomMute(btn) {
+        const label = document.getElementById('intercomMuteLabel');
+        if (label.innerText === 'Mute') {
+          label.innerText = 'Unmute';
+          btn.classList.add('bg-amber-600', 'text-white');
+          this.showToast('Microphone muted.');
+        } else {
+          label.innerText = 'Mute';
+          btn.classList.remove('bg-amber-600', 'text-white');
+          this.showToast('Microphone unmuted.');
+        }
+      },
+
+      toggleIntercomSpeaker(btn) {
+        const label = document.getElementById('intercomSpeakerLabel');
+        if (label.innerText === 'Speaker') {
+          label.innerText = 'Handset';
+          btn.classList.add('bg-blue-600', 'text-white');
+          this.showToast('Switched to speakerphone mode.');
+        } else {
+          label.innerText = 'Speaker';
+          btn.classList.remove('bg-blue-600', 'text-white');
+          this.showToast('Switched to earpiece mode.');
+        }
+      },
+
+      endIntercomCall() {
+        if (this.intercomInterval) {
+          clearInterval(this.intercomInterval);
+          this.intercomInterval = null;
+        }
+        this.closeModal('intercomCallModal');
+        this.showToast('Intercom call disconnected.');
+      },
+
+      // Chef Profile Handlers
+      openChefModal(chefName) {
+        const chef = this.chefsData[chefName] || {
+          name: chefName || 'Alex Morgan',
+          flat: 'Flat 402-B',
+          dish: 'Special Resident Dish',
+          rating: '5.0 ★',
+          reviewsCount: 1,
+          mealsDelivered: '24 Tiffins',
+          hygieneScore: '100% Food Grade Compliant',
+          specialties: ['Homestyle Cooking', 'Traditional Flavours'],
+          bio: 'Verified resident home cook sharing passion for hygienic and healthy home-cooked meals.',
+          phone: '+91 98200 40201',
+          intercom: '402'
+        };
+
+        this.activeChefData = chef;
+
+        document.getElementById('chefModalName').innerText = chef.name;
+        document.getElementById('chefModalFlat').innerText = chef.flat;
+        document.getElementById('chefModalRating').innerText = `${chef.rating} (${chef.reviewsCount} reviews)`;
+        document.getElementById('chefModalDelivered').innerText = chef.mealsDelivered;
+        document.getElementById('chefModalHygiene').innerText = chef.hygieneScore;
+        document.getElementById('chefModalBio').innerText = chef.bio;
+
+        const specContainer = document.getElementById('chefModalSpecialties');
+        if (specContainer) {
+          specContainer.innerHTML = chef.specialties.map(s => 
+            `<span class="px-2.5 py-1 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 text-[11px] font-bold">🍲 ${s}</span>`
+          ).join('');
+        }
+
+        this.openModal('chefModal');
+      },
+
+      callChefIntercom() {
+        if (!this.activeChefData) return;
+        const chef = this.activeChefData;
+        this.closeModal('chefModal');
+        this.callIntercom(`${chef.name} (${chef.flat})`, chef.intercom, chef.phone);
+      },
+
+      orderFromChefProfile() {
+        this.closeModal('chefModal');
+        if (this.activeChefData) {
+          for (const [id, dish] of Object.entries(this.kitchenInventory)) {
+            if (dish.chef.includes(this.activeChefData.name) || (this.activeChefData.dish && dish.title.includes(this.activeChefData.dish))) {
+              this.openKitchenPaymentModal(id);
+              return;
+            }
+          }
+        }
+        this.openKitchenPaymentModal('dish-khichdi');
+      },
+
+      // Dish Reviews Handlers
+      openDishReviewsModal(dishId) {
+        this.activeReviewDishId = dishId;
+        const reviewsData = this.dishReviews[dishId] || {
+          title: (this.kitchenInventory[dishId] && this.kitchenInventory[dishId].title) || 'Homestyle Kitchen Dish',
+          chef: (this.kitchenInventory[dishId] && this.kitchenInventory[dishId].chef) || 'Verified Society Home Cook',
+          rating: '4.9',
+          count: 12,
+          reviews: [
+            { author: 'Meera (Flat 302)', date: 'Yesterday', stars: 5, text: 'Delicious and comforting, properly sealed in hygienic tiffin packaging!' }
+          ]
+        };
+
+        document.getElementById('dishReviewsTitle').innerText = reviewsData.title;
+        document.getElementById('dishReviewsChef').innerText = `Prepared by ${reviewsData.chef}`;
+        document.getElementById('dishReviewsAvgDisplay').innerText = reviewsData.rating;
+        document.getElementById('dishReviewsCountDisplay').innerText = `Based on ${reviewsData.count} verified resident orders`;
+
+        const listEl = document.getElementById('dishReviewsList');
+        if (listEl) {
+          listEl.innerHTML = reviewsData.reviews.map(r => `
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-1 text-xs">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800">${r.author}</span>
+                <span class="text-amber-500 font-bold">${'★'.repeat(r.stars)}</span>
+              </div>
+              <p class="text-slate-600 text-[11px]">${r.text}</p>
+              <span class="text-[10px] text-slate-400 block">${r.date} • Verified Resident Handover</span>
+            </div>
+          `).join('');
+        }
+
+        this.openModal('dishReviewsModal');
+      },
+
+      submitDishReview() {
+        const input = document.getElementById('newReviewInput');
+        if (!input || !input.value.trim()) return;
+        const text = input.value.trim();
+        const dishId = this.activeReviewDishId || 'dish-khichdi';
+
+        if (!this.dishReviews[dishId]) {
+          this.dishReviews[dishId] = {
+            title: (this.kitchenInventory[dishId] && this.kitchenInventory[dishId].title) || 'Homestyle Dish',
+            chef: (this.kitchenInventory[dishId] && this.kitchenInventory[dishId].chef) || 'Verified Chef',
+            rating: '5.0',
+            count: 0,
+            reviews: []
+          };
+        }
+
+        this.dishReviews[dishId].reviews.unshift({
+          author: 'Alex Morgan (Flat 402-B)',
+          date: 'Just now',
+          stars: 5,
+          text: text
+        });
+        this.dishReviews[dishId].count++;
+
+        input.value = '';
+        this.openDishReviewsModal(dishId);
+        this.showToast('✓ Your review has been posted to HomeKitchen Community!', 4000);
       },
 
       // HomeKitchen Payment Modal & Booking Handlers
